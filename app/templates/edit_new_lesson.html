@@ -1,0 +1,42 @@
+{% extends "base.html" %}
+{% import "bootstrap/wtf.html" as wtf %}
+{% import "_macros.html" as macros %}
+
+{% block title %}{% if english == "yes" %}Modify profile of the class{% else %}修改班级资料{% endif %}{% endblock title %}
+
+{% block page_content %}
+
+{% if english == "yes" %}
+
+
+<div align=right class="post_footer"><a onclick='if(confirm("Confirm to delete? ")==true)window.location.href=
+    "{{ url_for('.del_new_lesson',newlesson_id=newlesson_id) }}";' style='text-decoration:none;'>
+       <span class="label label-default">Delete</span></a> 
+</div>   
+
+
+
+{% else %}
+
+
+<div align=right class="post_footer"><a onclick='if(confirm("确认删除？")==true)window.location.href=
+    "{{ url_for('.del_new_lesson',newlesson_id=newlesson_id) }}";' style='text-decoration:none;'>
+       <span class="label label-default">删除</span></a> 
+</div>   
+
+
+
+{% endif %}
+
+
+
+{% if current_user.is_authenticated and current_user.can(Permission.WRITE_ARTICLES) %}
+    {{ wtf.quick_form(form) }}
+{% endif %}
+
+{% endblock %}
+
+{% block scripts %}
+{{ super() }}
+{{ pagedown.include_pagedown() }}
+{% endblock %}

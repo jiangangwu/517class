@@ -1,0 +1,331 @@
+{% extends "base.html" %}
+{% import "_macros.html" as macros %}
+
+{% block title %}{% if english == "yes" %}{{ lesson.lesson_name }}（{{newlesson.year}}{{newlesson.season}}）--Name List{% else %}{{ lesson.lesson_name }}（{{newlesson.year}}{{newlesson.season}}）--名册{%endif%}{% endblock %}
+
+{% block page_content %}
+
+
+
+{% if english == "yes" %}
+
+
+
+
+
+
+
+
+<div class="page-header">
+{% if lesson.teacher_id == current_user.id %}
+    <a href="{{ url_for('main.change_lesson_pic',id=lesson.id) }}" title="Change portrait">
+         {% if lesson.pic != None %}               
+               <img class="img-rounded profile-thumbnail" src="{{ lesson.pic }}" width=200>
+         {% else %}
+               <img class="img-rounded profile-thumbnail" src="{{ user.gravatar(size=200) }}">
+         {% endif %}                                                           
+    </a>
+{% else %}
+         {% if lesson.pic != None %}               
+               <img class="img-rounded profile-thumbnail" src="{{ lesson.pic }}" width=200>
+         {% else %}
+               <img class="img-rounded profile-thumbnail" src="{{ user.gravatar(size=200) }}">
+         {% endif %}   
+{% endif %}
+
+<div class="profile-header">
+        <h3><a href="{{url_for('main.lesson',id=lesson.id)}}">{{ lesson.lesson_name }}</a></h3>
+        <a href="{{url_for('main.current_lesson',newlesson_id=newlesson.id) }}">{{ newlesson.year }}{{ newlesson.season }}'s homepage</a>
+                                  <small> <br>{{newlesson.about}}
+                                  <br>Created: {{ moment(lesson.timestamp).format('YY.MM.DD') }}</small>
+
+
+     {% if lesson.teacher_id == current_user.id %} 
+       <br><small><a href="{{url_for('main.edit_new_lesson',newlesson_id=newlesson.id)}}">Modify class profile</a></small><p/>
+       <p><a href="{{url_for('main.current_lesson_topic',newlesson_id=newlesson.id)}}">Class paper</a></p>
+       <p><a href="{{url_for('main.current_lesson_absence',newlesson_id=newlesson.id)}}">Absence</a></p>
+       <p><a href="{{url_for('main.current_lesson_namelist',newlesson_id=newlesson.id)}}">Name list</a></p>                     
+       <p><a href="{{ url_for('main.current_lesson_discussion',newlesson_id=newlesson.id) }}">Discussion</a></p>
+{% endif %}
+
+
+{% if student %}
+    {% if student.confirm %}
+        {% if student.student_id == current_user.id %} <br><br>
+           <p><a href="{{url_for('main.current_lesson_topic',newlesson_id=newlesson.id)}}">Class paper</a></p>
+           <p><a href="{{url_for('main.current_lesson_absence',newlesson_id=newlesson.id)}}">Select a seat</a></p>
+       <p><a href="{{url_for('main.current_lesson_namelist',newlesson_id=newlesson.id)}}">Name list</a></p>                     
+           <p><a href="{{ url_for('main.current_lesson_discussion',newlesson_id=newlesson.id) }}">Discussion</a></p>
+
+       {% endif %}   
+    {% endif %}
+{% endif %}
+
+{% if student != None %}
+    {% if not student.confirm and lesson.teacher_id != current_user.id %}
+          <p/>     <p><a href="{{url_for('main.current_lesson_topic',newlesson_id=newlesson.id)}}">Class paper</a></p>
+           <p><a href="{{url_for('main.current_lesson_absence',newlesson_id=newlesson.id)}}">Seats</a></p>
+       <p><a href="{{url_for('main.current_lesson_namelist',newlesson_id=newlesson.id)}}">Name list</a></p>                     
+           <p><a href="{{ url_for('main.current_lesson_discussion',newlesson_id=newlesson.id) }}">Discussion</a></p>
+    <p>Please wait for authorization of the teacher.&nbsp&nbsp<a  href="{{url_for('main.del_student',student_id=current_user.id,newlesson_id=newlesson.id)}}" onclick="javascript:if(!confirm('Are you sure to quit?'))return false;" >Quit from the class</a></p>
+{% endif %}
+{% endif %}
+{% if student == None and lesson.teacher_id != current_user.id %}
+           <p></p>
+           <p><a href="{{url_for('main.current_lesson_topic',newlesson_id=newlesson.id)}}">Class paper</a></p>
+           <p><a href="{{url_for('main.current_lesson_absence',newlesson_id=newlesson.id)}}">Seats</a></p>
+           <p><a href="{{url_for('main.current_lesson_namelist',newlesson_id=newlesson.id)}}">Name list</a></p>                     
+           <p><a href="{{ url_for('main.current_lesson_discussion',newlesson_id=newlesson.id) }}">Discussion</a></p>
+           <p><a class="btn btn-default" href="{{url_for('main.select_lesson',newlesson_id=newlesson.id)}}">Enroll Now</a></p>
+{% endif %}
+
+
+           <p><a class="btn btn-default" href="{{ url_for('main.write',tag='newlessons_' + newlesson.id | string) }}">Write</a></p>
+
+
+
+
+    </div>
+</div>
+
+
+
+
+
+
+{% if lesson.teacher_id == current_user.id %} <br><br>
+    {% if users_confirmed or users_unconfirmed%}
+    <h4>Name list</h4>
+        <table cellspacing='0'  border='1' bordercolor='#D0D0D0' cellpadding='4' align='left'>
+        <th>Username</th><th>Real name</th><th>Student No.</th><th>Email</th><th>Tel.</th><th>About</th><th>Operation</th>
+        {% for u in users_confirmed %}
+           <tr><td><a href="{{url_for('main.user',username=u.username)}}">{{u.username}}</a></td>
+           <td>{{u.name}}</td><td>{{u.student_no}}</td>
+           <td>{{u.email}}</td><td>{{u.tel}}</td><td>{{u.about_me}}</td>
+           <td><a onclick="if(confirm('Are you sure to delete?')==true)window.location.href='{{ url_for('main.del_student',newlesson_id=newlesson.id,student_id=u.id) }}';">Delete</a></td></tr>
+        {% endfor %}
+    
+    {% endif %}
+        
+    {% if users_unconfirmed %}        
+        {% for u in users_unconfirmed %}
+            <tr><td><a href="{{url_for('main.user',username=u.username)}}">{{u.username}}</a></td>
+                   <td>{{u.name}}</td><td>{{u.student_no}}</td>
+                   <td>{{u.email}}</td><td>{{u.tel}}</td>
+                   <td>{{u.about_me}}</td>
+            <td><a href="{{ url_for('main.auth_student',newlesson_id=newlesson.id,student_id=u.id)}}">Approve</a></td></tr>
+        {% endfor %}            
+    {% endif %}
+    </table>
+{% endif %}
+
+
+{% if student != None %}
+    {% if student.confirm %}
+        <h4>Name list</h4>
+        <table cellspacing='0'  border='1' bordercolor='#D0D0D0' cellpadding='4' align='left'>
+        <th>Username</th><th>Real name</th><th>Student No.</th><th>Email</th><th>Tel.</th><th>About</th>
+            {%- for u in users_confirmed %}
+                <tr><td><a href="{{url_for('main.user',username=u.username)}}">{{u.username}}</a></td>
+                    <td>{{u.name}}</td><td>{{u.student_no}}</td>
+                    <td>{{u.email}}</td><td>{{u.tel}}</td><td>{{u.about_me}}</td><tr>
+            {% endfor -%}
+        </table>
+    {% endif %}
+{% endif %}
+
+
+{% if student != None %}
+    {% if not student.confirm and lesson.teacher_id != current_user.id %}
+        <h4>Name list</h4>
+        <table cellspacing='0'  border='1' bordercolor='#D0D0D0' cellpadding='4' align='left'>
+        <th>Username</th><th>Real name</th><th>Student No.</th><th>Email</th><th>Tel.</th><th>About</th>
+            {%- for u in users_confirmed %}
+                <tr><td><a href="{{url_for('main.user',username=u.username)}}">{{u.username}}</a></td>
+                    <td>{{u.name}}</td><td>{{u.student_no}}</td>
+                    <td>{{u.email}}</td><td>{{u.tel}}</td><td>{{u.about_me}}</td><tr>
+            {% endfor -%}
+        </table>
+    {% else %}
+    <br>
+    {% endif %}
+{% endif %}
+
+{% if student == None and lesson.teacher_id != current_user.id %}
+        <h4>Namelist</h4>
+        <table cellspacing='0'  border='1' bordercolor='#D0D0D0' cellpadding='4' align='left'>
+        <th>Username</th><th>Real name</th><th>Student No.</th><th>Email</th><th>About</th>
+            {%- for u in users_confirmed %}
+                <tr><td><a href="{{url_for('main.user',username=u.username)}}">{{u.username}}</a></td>
+                    <td>{{u.name}}</td><td>{{u.student_no}}</td>
+                    <td>{{u.email}}</td><td>{{u.about_me}}</td><tr>
+            {% endfor -%}
+        </table>
+{% endif %}
+</div></div>
+<br><br><br><br><br><br>
+
+
+
+
+{% else %}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<div class="page-header">
+{% if lesson.teacher_id == current_user.id %}
+    <a href="{{ url_for('main.change_lesson_pic',id=lesson.id) }}" title="更换头像">
+         {% if lesson.pic != None %}               
+               <img class="img-rounded profile-thumbnail" src="{{ lesson.pic }}" width=200>
+         {% else %}
+               <img class="img-rounded profile-thumbnail" src="{{ user.gravatar(size=200) }}">
+         {% endif %}                                                           
+    </a>
+{% else %}
+         {% if lesson.pic != None %}               
+               <img class="img-rounded profile-thumbnail" src="{{ lesson.pic }}" width=200>
+         {% else %}
+               <img class="img-rounded profile-thumbnail" src="{{ user.gravatar(size=200) }}">
+         {% endif %}   
+{% endif %}
+
+<div class="profile-header">
+        <h3><a href="{{url_for('main.lesson',id=lesson.id)}}">{{ lesson.lesson_name }}</a></h3>
+        <a href="{{url_for('main.current_lesson',newlesson_id=newlesson.id) }}">{{ newlesson.year }}{{ newlesson.season }}的班级主页</a>
+                                  <small> <br>（{{newlesson.about}}；开课日：{{ moment(lesson.timestamp).format('YY.MM.DD') }}）</small>
+
+
+
+{% if lesson.teacher_id == current_user.id %} 
+       <small><a href="{{url_for('main.edit_new_lesson',newlesson_id=newlesson.id)}}">（修改班级资料）</a></small><p/>
+           <p><a href="{{url_for('main.current_lesson_topic',newlesson_id=newlesson.id)}}">课程论文</a></p>
+       <p><a href="{{url_for('main.current_lesson_absence',newlesson_id=newlesson.id)}}">考勤</a></p>
+       <p><a href="{{url_for('main.current_lesson_namelist',newlesson_id=newlesson.id)}}">名册</a></p>                     
+       <p><a href="{{ url_for('main.current_lesson_discussion',newlesson_id=newlesson.id) }}">讨论</a></p>
+{% endif %}
+
+
+{% if student %}
+    {% if student.confirm %}
+        {% if student.student_id == current_user.id %} <br><br>
+           <p><a href="{{url_for('main.current_lesson_topic',newlesson_id=newlesson.id)}}">课程论文</a></p>
+           <p><a href="{{url_for('main.current_lesson_absence',newlesson_id=newlesson.id)}}">选择座位</a></p>
+       <p><a href="{{url_for('main.current_lesson_namelist',newlesson_id=newlesson.id)}}">名册</a></p>                     
+           <p><a href="{{ url_for('main.current_lesson_discussion',newlesson_id=newlesson.id) }}">讨论</a></p>
+
+       {% endif %}   
+    {% endif %}
+{% endif %}
+
+{% if student != None %}
+    {% if not student.confirm and lesson.teacher_id != current_user.id %}
+          <p/>     <p><a href="{{url_for('main.current_lesson_topic',newlesson_id=newlesson.id)}}">课程论文</a></p>
+           <p><a href="{{url_for('main.current_lesson_absence',newlesson_id=newlesson.id)}}">座位</a></p>
+       <p><a href="{{url_for('main.current_lesson_namelist',newlesson_id=newlesson.id)}}">名册</a></p>                     
+           <p><a href="{{ url_for('main.current_lesson_discussion',newlesson_id=newlesson.id) }}">讨论</a></p>
+    <p>请耐心等待老师批准。&nbsp&nbsp<a  href="{{url_for('main.del_student',student_id=current_user.id,newlesson_id=newlesson.id)}}" onclick="javascript:if(!confirm('确认退出？'))return false;" >退出该班</a></p>
+{% endif %}
+{% endif %}
+{% if student == None and lesson.teacher_id != current_user.id %}
+           <p></p>
+           <p><a href="{{url_for('main.current_lesson_topic',newlesson_id=newlesson.id)}}">课程论文</a></p>
+           <p><a href="{{url_for('main.current_lesson_absence',newlesson_id=newlesson.id)}}">座位</a></p>
+       <p><a href="{{url_for('main.current_lesson_namelist',newlesson_id=newlesson.id)}}">名册</a></p>                     
+           <p><a href="{{ url_for('main.current_lesson_discussion',newlesson_id=newlesson.id) }}">讨论</a></p>
+           <p><a class="btn btn-default" href="{{url_for('main.select_lesson',newlesson_id=newlesson.id)}}">申请选修</a></p>
+{% endif %}
+
+
+
+    </div>
+</div>
+{% if lesson.teacher_id == current_user.id %} <br><br>
+    {% if users_confirmed or users_unconfirmed%}
+    <h4>名册</h4>
+        <table cellspacing='0'  border='1' bordercolor='#D0D0D0' cellpadding='4' align='left'>
+        <th>网名</th><th>姓名</th><th>学号</th><th>电邮</th><th>手机</th><th>简介</th><th>操作</th>
+        {% for u in users_confirmed %}
+           <tr><td><a href="{{url_for('main.user',username=u.username)}}">{{u.username}}</a></td>
+           <td>{{u.name}}</td><td>{{u.student_no}}</td>
+           <td>{{u.email}}</td><td>{{u.tel}}</td><td>{{u.about_me}}</td>
+           <td><a onclick="if(confirm('确认删除？')==true)window.location.href='{{ url_for('main.del_student',newlesson_id=newlesson.id,student_id=u.id) }}';">删除</a></td></tr>
+        {% endfor %}
+    
+    {% endif %}
+        
+    {% if users_unconfirmed %}        
+        {% for u in users_unconfirmed %}
+            <tr><td><a href="{{url_for('main.user',username=u.username)}}">{{u.username}}</a></td>
+                   <td>{{u.name}}</td><td>{{u.student_no}}</td>
+                   <td>{{u.email}}</td><td>{{u.tel}}</td>
+                   <td>{{u.about_me}}</td>
+            <td><a href="{{ url_for('main.auth_student',newlesson_id=newlesson.id,student_id=u.id)}}">批准</a></td></tr>
+        {% endfor %}            
+    {% endif %}
+    </table>
+{% endif %}
+
+
+{% if student != None %}
+    {% if student.confirm %}
+        <h4>名册</h4>
+        <table cellspacing='0'  border='1' bordercolor='#D0D0D0' cellpadding='4' align='left'>
+        <th>网名</th><th>姓名</th><th>学号</th><th>电邮</th><th>手机</th><th>简介</th>
+            {%- for u in users_confirmed %}
+                <tr><td><a href="{{url_for('main.user',username=u.username)}}">{{u.username}}</a></td>
+                    <td>{{u.name}}</td><td>{{u.student_no}}</td>
+                    <td>{{u.email}}</td><td>{{u.tel}}</td><td>{{u.about_me}}</td><tr>
+            {% endfor -%}
+        </table>
+    {% endif %}
+{% endif %}
+
+
+{% if student != None %}
+    {% if not student.confirm and lesson.teacher_id != current_user.id %}
+        <h4>名册</h4>
+        <table cellspacing='0'  border='1' bordercolor='#D0D0D0' cellpadding='4' align='left'>
+        <th>网名</th><th>姓名</th><th>学号</th><th>电邮</th><th>手机</th><th>简介</th>
+            {%- for u in users_confirmed %}
+                <tr><td><a href="{{url_for('main.user',username=u.username)}}">{{u.username}}</a></td>
+                    <td>{{u.name}}</td><td>{{u.student_no}}</td>
+                    <td>{{u.email}}</td><td>{{u.tel}}</td><td>{{u.about_me}}</td><tr>
+            {% endfor -%}
+        </table>
+    {% else %}
+    <br>
+    {% endif %}
+{% endif %}
+
+{% if student == None and lesson.teacher_id != current_user.id %}
+        <h4>名册</h4>
+        <table cellspacing='0'  border='1' bordercolor='#D0D0D0' cellpadding='4' align='left'>
+        <th>网名</th><th>姓名</th><th>学号</th><th>电邮</th><th>简介</th>
+            {%- for u in users_confirmed %}
+                <tr><td><a href="{{url_for('main.user',username=u.username)}}">{{u.username}}</a></td>
+                    <td>{{u.name}}</td><td>{{u.student_no}}</td>
+                    <td>{{u.email}}</td><td>{{u.about_me}}</td><tr>
+            {% endfor -%}
+        </table>
+{% endif %}
+</div></div>
+<br><br><br><br><br><br>
+
+
+{% endif %}
+
+
+
+
+{% endblock %}

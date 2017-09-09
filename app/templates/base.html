@@ -1,0 +1,203 @@
+{% extends "bootstrap/base.html" %}
+
+{% block html_attribs %} lang="zh-CN" {% endblock html_attribs %}
+       
+{% block metas %}
+{{ super() }}
+<meta charset="utf-8">
+<meta http-equiv="X-UA-Compatible" content="IE=edge" >
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1.0,maximum-scale=1.0,user-scalable=0" />
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="black">
+<meta name="format-detection" content="telephone=no">
+{% endblock metas %}
+    
+{% block head %}
+{{ super() }}
+<link rel="shortcut icon" href="{{ url_for('static', filename='favicon.ico') }}" type="image/x-icon">
+<link rel="icon" href="{{ url_for('static', filename='favicon.ico') }}" type="image/x-icon">
+<link href="{{ url_for('static', filename='favicon.ico') }}" type="image/x-icon" rel="apple-touch-icon">
+<link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='css/styles.css') }}">
+                                            
+<!-- mathjax config similar to math.stackexchange -->
+<script type="text/x-mathjax-config">
+MathJax.Hub.Config({
+    jax: ["input/TeX", "output/HTML-CSS"],
+    tex2jax: {
+        inlineMath: [ ['$', '$'] ],
+        displayMath: [ ['$$', '$$']],
+        processEscapes: true,
+        skipTags: ['script', 'noscript', 'style', 'textarea', 'pre', 'code']
+    },
+    messageStyle: "none",
+    "HTML-CSS": { preferredFont: "TeX", availableFonts: ["STIX","TeX"] }
+});
+</script>
+<script type="text/javascript" src="http://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>                                     
+                                               
+{% endblock head %}
+
+{% block navbar %}
+
+{% if english == "yes" %}
+
+<div class="navbar navbar-inverse" role="navigation">
+    <div class="container">
+        <div class="navbar-header">
+            <button type="button" class="navbar-toggle" data-toggle="collapse" data-target=".navbar-collapse">
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+            </button>
+            <a class="navbar-brand" href="{{ url_for('main.homepage') }}"><font style="font-weight:bold;font-family:impact"><b><strong>517Class</strong></b></font></a>
+        </div>
+        <div class="navbar-collapse collapse">
+            <ul class="nav navbar-nav">
+                <li><a href="{{ url_for('main.blog') }}">Blog</a></li> 
+               <li><a href="{{ url_for('main.lesson_main') }}">Lesson</a></li>
+             <li><a target="_blank" href="{{ url_for('main.tools') }}">Tool</a></li>
+   
+                {% if current_user.is_authenticated %}
+                <li><a href="{{ url_for('main.write',tag='posts') }}">Write</a></li>
+                <li><a href="{{ url_for('main.user', username=current_user.username) }}">Me</a></li>
+                {% else %}
+                <li><a href="{{ url_for('main.about') }}">About</a></li>
+                <li><a href="{{ url_for('main.set_cookie_english') }}">中文</a></li>
+               {% endif %}
+                
+            </ul>
+            <ul class="nav navbar-nav navbar-right">
+                {% if current_user.can(Permission.MODERATE_COMMENTS) %}
+                <li><a href="{{ url_for('main.moderate') }}">auth_comment</a></li>
+                {% endif %}
+                {% if current_user.is_authenticated %}
+                <li class="dropdown">
+                    <a href="#" class="dropdown-toggle" data-toggle="dropdown">
+         {% if current_user.avatar_file != None  %}               
+               <img src="{{ current_user.avatar_file }}" height=18 width=18>
+         {% else %}
+               <img src="{{ current_user.gravatar(size=18) }}">
+         {% endif %}                                                           
+                     Account<b class="caret"></b>
+                    </a>
+                    <ul class="dropdown-menu">
+                       <li><a href="{{ url_for('main.about') }}">About</a></li>
+                       <li><a href="{{ url_for('main.suggestion') }}">Suggestion</a></li>
+                       <li><a href="{{ url_for('main.change_password') }}">Modify Password</a></li>
+<!--                       <li><a href="{{ url_for('main.change_email_request') }}">修改邮箱</a></li> -->
+                       <li><a href="{{ url_for('main.edit_profile') }}">Update Account</a></li>
+                       {% if current_user.name and not current_user.teacher%}  
+                       <li><a href="{{url_for('main.add_teacher')}}">Register as Teacher</a></li>
+                       {% endif %}                                         
+                       {% if current_user.name and current_user.teacher %}  
+                       <li><a href="{{url_for('main.teacher',id=current_user.id)}}">Teacher's Homepage</a></li>
+                       {% endif %}                                     
+                <li><a href="{{ url_for('main.set_cookie_english') }}">中文</a></li>
+              <li><a href="{{ url_for('main.logout') }}">Log out</a></li>
+                   </ul>
+                </li>
+                {% else %}
+                <li><a href="{{ url_for('main.login') }}">Log in</a></li>
+                {% endif %}
+            </ul>
+        </div>
+    </div>
+</div>
+
+
+
+
+
+{% else %}
+
+<div class="navbar navbar-inverse" role="navigation">
+    <div class="container">
+        <div class="navbar-header">
+            <button type="button" class="navbar-toggle" data-toggle="collapse" data-target=".navbar-collapse">
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+            </button>
+            <a class="navbar-brand" href="{{ url_for('main.homepage') }}"><font style="font-weight:bold;font-family:impact"><b><strong>517上课</strong></b></font></a>
+        </div>
+        <div class="navbar-collapse collapse">
+            <ul class="nav navbar-nav">
+                <li><a href="{{ url_for('main.blog') }}">博客</a></li> 
+               <li><a href="{{ url_for('main.lesson_main') }}">课程</a></li>
+
+                {% if current_user.is_authenticated %}
+               <li><a target="_blank" href="{{ url_for('main.tools') }}">工具</a></li>
+                <li><a href="{{ url_for('main.write',tag='posts') }}">发贴</a></li>
+                <li><a href="{{ url_for('main.user', username=current_user.username) }}">个人</a></li>
+                {% else %}
+               <li><a target="_blank" href="{{ url_for('main.tools') }}">工具</a></li>
+                <li><a href="{{ url_for('main.about') }}">关于</a></li>
+                <li><a href="{{ url_for('main.set_cookie_english') }}">English</a></li>
+               {% endif %}
+                
+            </ul>
+            <ul class="nav navbar-nav navbar-right">
+                {% if current_user.can(Permission.MODERATE_COMMENTS) %}
+                <li><a href="{{ url_for('main.moderate') }}">审查评论</a></li>
+                {% endif %}
+                {% if current_user.is_authenticated %}
+                <li class="dropdown">
+                    <a href="#" class="dropdown-toggle" data-toggle="dropdown">
+         {% if current_user.avatar_file != None  %}               
+               <img src="{{ current_user.avatar_file }}" height=18 width=18>
+         {% else %}
+               <img src="{{ current_user.gravatar(size=18) }}">
+         {% endif %}                                                           
+                     账户<b class="caret"></b>
+                    </a>
+                    <ul class="dropdown-menu">
+                       <li><a href="{{ url_for('main.about') }}">关于网站</a></li>
+                       <li><a href="{{ url_for('main.suggestion') }}">提出建议</a></li>
+                       <li><a href="{{ url_for('main.change_password') }}">修改密码</a></li>
+<!--                       <li><a href="{{ url_for('main.change_email_request') }}">修改邮箱</a></li> -->
+                       <li><a href="{{ url_for('main.edit_profile') }}">完善资料</a></li>
+                       {% if current_user.name and not current_user.teacher%}  
+                       <li><a href="{{url_for('main.add_teacher')}}">登记为老师</a></li>
+                       {% endif %}                                         
+                       {% if current_user.name and current_user.teacher %}  
+                       <li><a href="{{url_for('main.teacher',id=current_user.id)}}">老师主页</a></li>
+                       {% endif %}                                     
+                 <li><a href="{{ url_for('main.set_cookie_english') }}">English</a></li>
+             <li><a href="{{ url_for('main.logout') }}">登出</a></li>
+                   </ul>
+                </li>
+                {% else %}
+                <li><a href="{{ url_for('main.login') }}">登入</a></li>
+                {% endif %}
+            </ul>
+        </div>
+    </div>
+</div>
+
+{% endif %}
+
+{% endblock navbar %}
+
+{% block content %}
+<div class="container">
+    {% for message in get_flashed_messages() %}
+    <div class="alert alert-warning">
+        <button type="button" class="close" data-dismiss="alert">&times;</button>
+        {{ message }}
+    </div>
+    {% endfor %}
+
+    {% block page_content %}{% endblock %}
+</div>
+{% endblock content %}
+
+
+{% block scripts %}
+{{ super() }}
+{% if english == "yes" %}
+    {{ moment.include_moment() }}
+{% else %}
+    {{ moment.include_moment2() | replace("moment.locale(\'en\');","moment.locale('zh-cn');")}}
+{% endif %}
+{% endblock %}

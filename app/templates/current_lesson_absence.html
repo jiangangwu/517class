@@ -1,0 +1,344 @@
+{% extends "base.html" %}
+{% import "_macros.html" as macros %}
+
+{% block title %}{% if english == "yes" %}{{ lesson.lesson_name }}（{{newlesson.year}}{{newlesson.season}}）--Seats{% else %}{{ lesson.lesson_name }}（{{newlesson.year}}{{newlesson.season}}）--座位{% endif %}{% endblock %}
+
+{% block page_content %}
+
+
+{% if english == "yes" %}
+
+
+<div class="page-header">
+{% if lesson.teacher_id == current_user.id %}
+    <a href="{{ url_for('main.change_lesson_pic',id=lesson.id) }}" title="Change portrait">
+         {% if lesson.pic != None %}               
+               <img class="img-rounded profile-thumbnail" src="{{ lesson.pic }}" width=200>
+         {% else %}
+               <img class="img-rounded profile-thumbnail" src="{{ user.gravatar(size=200) }}">
+         {% endif %}                                                           
+    </a>
+{% else %}
+         {% if lesson.pic != None %}               
+               <img class="img-rounded profile-thumbnail" src="{{ lesson.pic }}" width=200>
+         {% else %}
+               <img class="img-rounded profile-thumbnail" src="{{ user.gravatar(size=200) }}">
+         {% endif %}   
+{% endif %}
+ 
+<div class="profile-header">
+        <h3><a href="{{url_for('main.lesson',id=lesson.id)}}">{{ lesson.lesson_name }}</a></h3>
+        <a href="{{url_for('main.current_lesson',newlesson_id=newlesson.id) }}">{{ newlesson.year }}{{ newlesson.season }}'s homepage</a>
+                                  <small> <br>{{newlesson.about}}
+                                  <br>Created: {{ moment(lesson.timestamp).format('YY.MM.DD') }}</small>
+
+
+{% if lesson.teacher_id == current_user.id %} 
+       <br><small><a href="{{url_for('main.edit_new_lesson',newlesson_id=newlesson.id)}}">Modify class profile</a></small><p/>
+           <p><a href="{{url_for('main.current_lesson_topic',newlesson_id=newlesson.id)}}">Class paper</a></p>
+       <p><a href="{{url_for('main.current_lesson_absence',newlesson_id=newlesson.id)}}">Absence</a></p>
+       <p><a href="{{url_for('main.current_lesson_namelist',newlesson_id=newlesson.id)}}">Name list</a></p>                     
+       <p><a href="{{ url_for('main.current_lesson_discussion',newlesson_id=newlesson.id) }}">Discussion</a></p>
+{% endif %}
+
+
+{% if student %}
+    {% if student.confirm %}
+        {% if student.student_id == current_user.id %} <br><br>
+           <p><a href="{{url_for('main.current_lesson_topic',newlesson_id=newlesson.id)}}">Class paper</a></p>
+           <p><a href="{{url_for('main.current_lesson_absence',newlesson_id=newlesson.id)}}">Select a seat</a></p>
+       <p><a href="{{url_for('main.current_lesson_namelist',newlesson_id=newlesson.id)}}">Name list</a></p>                     
+           <p><a href="{{ url_for('main.current_lesson_discussion',newlesson_id=newlesson.id) }}">Discussion</a></p>
+
+       {% endif %}   
+    {% endif %}
+{% endif %}
+
+{% if student != None %}
+    {% if not student.confirm and lesson.teacher_id != current_user.id %}
+          <p/>     <p><a href="{{url_for('main.current_lesson_topic',newlesson_id=newlesson.id)}}">Class paper</a></p>
+           <p><a href="{{url_for('main.current_lesson_absence',newlesson_id=newlesson.id)}}">Select a seat</a></p>
+       <p><a href="{{url_for('main.current_lesson_namelist',newlesson_id=newlesson.id)}}">Name list</a></p>                     
+           <p><a href="{{ url_for('main.current_lesson_discussion',newlesson_id=newlesson.id) }}">Discussion</a></p>
+    <p>Please wait for authorization of the teacher.&nbsp&nbsp<a  href="{{url_for('main.del_student',student_id=current_user.id,newlesson_id=newlesson.id)}}" onclick="javascript:if(!confirm('Are you sure to quit from this class?'))return false;" >Quit from this class</a></p>
+    {% endif %}
+{% endif %}
+{% if student == None and lesson.teacher_id != current_user.id %}
+           <p></p>
+           <p><a href="{{url_for('main.current_lesson_topic',newlesson_id=newlesson.id)}}">Class paper</a></p>
+           <p><a href="{{url_for('main.current_lesson_absence',newlesson_id=newlesson.id)}}">Selcet a seat</a></p>
+           <p><a href="{{url_for('main.current_lesson_namelist',newlesson_id=newlesson.id)}}">Name list</a></p>                     
+           <p><a href="{{ url_for('main.current_lesson_discussion',newlesson_id=newlesson.id) }}">Discussion</a></p>
+           <p><a class="btn btn-default" href="{{url_for('main.select_lesson',newlesson_id=newlesson.id)}}">Enroll Now</a></p>
+{% endif %}
+
+       {% if lesson.teacher_id == current_user.id %} 
+           <p><a class="btn btn-default" href="{{url_for('main.current_lesson_absence',newlesson_id=newlesson.id)}}">Please answer</a><big>&nbsp&nbsp&nbsp&nbsp{{replier.name}}</big></p>    
+       {% endif %}
+
+
+<script type='text/javascript'>
+      function setSeat(myseat,theseat){
+          if (myseat==theseat){
+              document.getElementById('seat').value=myseat;
+          }else{
+              alert("The seat has been occupied, please choose another.");
+              return false;
+          }
+      }
+      
+       function setSeat2(myseat,theseat){
+          if (myseat!=theseat){
+              document.getElementById('seat').value=myseat;
+          }else{
+              alert("Please choose another.");
+              return false;
+          }
+      }     
+      
+</script>
+
+{% if lesson.teacher_id == current_user.id %}
+<form method="post">
+<input id="submit" name="submit" type="submit"  class="btn btn-default"  onclick="javascript:if(document.getElementById('seat').value===''){alert('You should choose a seat.');return false;}else{if(!confirm('Are you sure?'))return false;}"  type="submit" value="Submit the seat"></p>
+ <font color=gray>The absent seat is: </font>
+<input type="text" style="width:60px;height:30px;font-size:14px;background-color:white;border:0px solid white;" 
+ id="seat" name="seat" value=""/>
+ </form>
+       </ul>
+    </div>  
+</div>
+<form>
+<table cellspacing="6px">
+{% if current_user.is_authenticated and current_user.can(Permission.WRITE_ARTICLES) %}
+    {%- for i in range(newlesson.room_row) %} 
+        <tr><td style="width:60px;height:25px;font-size:12px;background-color:white;">Row {{newlesson.room_row-i}}</td>
+           {% for j in range(newlesson.room_column) %}        
+            <td>             
+               <input type="button" style="width:60px;height:20px;font-size:12px;color:gray;background-color:white;border:1px solid gray;" 
+               id="{% if newlesson.room_row-i <= 9  %}0{{ newlesson.room_row-i }}{% else %}{{ newlesson.room_row-i-1 }}{% endif %}{% if j+1 <= 9 %}0{{ newlesson.room_column-j }}{% else %}{{ newlesson.room_column-j }}{% endif %}"
+               onclick="setSeat2('{% if newlesson.room_row-i <= 9  %}0{{ newlesson.room_row-i }}{% else %}{{ newlesson.room_row-i }}{% endif %}{% if j+1 <= 9 %}0{{ newlesson.room_column-j }}{% else %}{{ newlesson.room_column-j }}{% endif %}','{{seats[-i*newlesson.room_column-j-1]}}');"
+               value="{{seats[-i*newlesson.room_column-j-1]}}{{absences[-i*newlesson.room_column-j-1]}} " />                                                                   
+             </td>
+            {% endfor -%}
+        </tr>
+        {% endfor %}
+    </table>
+<ul class="nav nav-tabs">
+
+<br/>
+</ul>
+   <p><h2><b>&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp
+   讲&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp台</b></h2></p> 
+
+    {% endif %}
+{% endif %}
+
+{% if student and lesson.teacher_id != current_user.id %}
+    {% if student.confirm == 1 %}
+<form method="post">
+<input id="submit" name="submit" type="submit"  class="btn btn-default" onclick="javascript:if(document.getElementById('seat').value===''){alert('You should choose a seat.');return false;}else{if(!confirm('Are you sure?'))return false;}"  value="Submit">                                                                                               
+</p>
+ <font color=gray>Selected seat:</font> <input type="text" style="width:60px;height:30px;font-size:18px;background-color:white;border:0px solid white;" 
+ id="seat" name="seat" value=""/>
+ </form>
+     {% endif %}
+{% endif %}
+</div> 
+{% if lesson.teacher_id != current_user.id %}
+<p><h2><b>Platform</b></h2></p>  
+ </div>
+<form>
+<table cellspacing="6px">
+    {%- for i in range(newlesson.room_row) %}
+            <tr><td style="width:60px;height:25px;font-size:12px;color:gray;background-color:white;" >Row {{i+1}}</td>
+           {% for j in range(newlesson.room_column) %}    
+            <td>            
+               <input type="button" style="width:60px;height:25px;font-size:12px;background-color:white;border:1px solid gray;"  
+               id="{% if i+1 <= 9  %}0{{ i+1 }}{% else %}{{ i+1 }}{% endif %}{% if j+1 <= 9 %}0{{ j+1 }}{% else %}{{ j+1 }}{% endif %}"
+               onclick="setSeat('{% if i+1 <= 9  %}0{{ i+1 }}{% else %}{{ i+1 }}{% endif %}{% if j+1 <= 9 %}0{{ j+1 }}{% else %}{{ j+1 }}{% endif %}','{{seats[i*newlesson.room_column+j]}}');"
+               value="{{seats[i*newlesson.room_column+j]}}{{absences[i*newlesson.room_column+j]}}"/>
+                 
+            </td>
+            {% endfor -%}
+        </tr>
+    {% endfor %}
+    </table>
+</form>
+{% endif %}
+
+
+
+{% else %}
+
+
+
+
+
+
+
+
+<div class="page-header">
+{% if lesson.teacher_id == current_user.id %}
+    <a href="{{ url_for('main.change_lesson_pic',id=lesson.id) }}" title="更换头像">
+         {% if lesson.pic != None %}               
+               <img class="img-rounded profile-thumbnail" src="{{ lesson.pic }}" width=200>
+         {% else %}
+               <img class="img-rounded profile-thumbnail" src="{{ user.gravatar(size=200) }}">
+         {% endif %}                                                           
+    </a>
+{% else %}
+         {% if lesson.pic != None %}               
+               <img class="img-rounded profile-thumbnail" src="{{ lesson.pic }}" width=200>
+         {% else %}
+               <img class="img-rounded profile-thumbnail" src="{{ user.gravatar(size=200) }}">
+         {% endif %}   
+{% endif %}
+ 
+<div class="profile-header">
+        <h3><a href="{{url_for('main.lesson',id=lesson.id)}}">{{ lesson.lesson_name }}</a></h3>
+        <a href="{{url_for('main.current_lesson',newlesson_id=newlesson.id) }}">{{ newlesson.year }}{{ newlesson.season }}的班级主页</a>
+                                  <small> <br>（{{newlesson.about}}；开课日：{{ moment(lesson.timestamp).format('YY.MM.DD') }}）</small>
+
+
+{% if lesson.teacher_id == current_user.id %} 
+       <small><a href="{{url_for('main.edit_new_lesson',newlesson_id=newlesson.id)}}">（修改班级资料）</a></small><p/>
+           <p><a href="{{url_for('main.current_lesson_topic',newlesson_id=newlesson.id)}}">课程论文</a></p>
+       <p><a href="{{url_for('main.current_lesson_absence',newlesson_id=newlesson.id)}}">考勤</a></p>
+       <p><a href="{{url_for('main.current_lesson_namelist',newlesson_id=newlesson.id)}}">名册</a></p>                     
+       <p><a href="{{ url_for('main.current_lesson_discussion',newlesson_id=newlesson.id) }}">讨论</a></p>
+{% endif %}
+
+
+{% if student %}
+    {% if student.confirm %}
+        {% if student.student_id == current_user.id %} <br><br>
+           <p><a href="{{url_for('main.current_lesson_topic',newlesson_id=newlesson.id)}}">课程论文</a></p>
+           <p><a href="{{url_for('main.current_lesson_absence',newlesson_id=newlesson.id)}}">选择座位</a></p>
+       <p><a href="{{url_for('main.current_lesson_namelist',newlesson_id=newlesson.id)}}">名册</a></p>                     
+           <p><a href="{{ url_for('main.current_lesson_discussion',newlesson_id=newlesson.id) }}">讨论</a></p>
+
+       {% endif %}   
+    {% endif %}
+{% endif %}
+
+{% if student != None %}
+    {% if not student.confirm and lesson.teacher_id != current_user.id %}
+          <p/>     <p><a href="{{url_for('main.current_lesson_topic',newlesson_id=newlesson.id)}}">课程论文</a></p>
+           <p><a href="{{url_for('main.current_lesson_absence',newlesson_id=newlesson.id)}}">座位</a></p>
+       <p><a href="{{url_for('main.current_lesson_namelist',newlesson_id=newlesson.id)}}">名册</a></p>                     
+           <p><a href="{{ url_for('main.current_lesson_discussion',newlesson_id=newlesson.id) }}">讨论</a></p>
+    <p>请耐心等待老师批准。&nbsp&nbsp<a  href="{{url_for('main.del_student',student_id=current_user.id,newlesson_id=newlesson.id)}}" onclick="javascript:if(!confirm('确认退出？'))return false;" >退出该班</a></p>
+    {% endif %}
+{% endif %}
+{% if student == None and lesson.teacher_id != current_user.id %}
+           <p></p>
+           <p><a href="{{url_for('main.current_lesson_topic',newlesson_id=newlesson.id)}}">课程论文</a></p>
+           <p><a href="{{url_for('main.current_lesson_absence',newlesson_id=newlesson.id)}}">座位</a></p>
+           <p><a href="{{url_for('main.current_lesson_namelist',newlesson_id=newlesson.id)}}">名册</a></p>                     
+           <p><a href="{{ url_for('main.current_lesson_discussion',newlesson_id=newlesson.id) }}">讨论</a></p>
+           <p><a class="btn btn-default" href="{{url_for('main.select_lesson',newlesson_id=newlesson.id)}}">申请选修</a></p>
+{% endif %}
+
+       {% if lesson.teacher_id == current_user.id %} 
+           <p><a class="btn btn-default" href="{{url_for('main.current_lesson_absence',newlesson_id=newlesson.id)}}">请问：</a><big>&nbsp&nbsp&nbsp&nbsp{{replier.name}}</big></p>    
+       {% endif %}
+
+
+<script type='text/javascript'>
+      function setSeat(myseat,theseat){
+          if (myseat==theseat){
+              document.getElementById('seat').value=myseat;
+          }else{
+              alert("已经有人坐了，请另外选择。");
+              return false;
+          }
+      }
+      
+       function setSeat2(myseat,theseat){
+          if (myseat!=theseat){
+              document.getElementById('seat').value=myseat;
+          }else{
+              alert("此处无人坐，请另外选择。");
+              return false;
+          }
+      }     
+      
+</script>
+
+{% if lesson.teacher_id == current_user.id %}
+<form method="post">
+<input id="submit" name="submit" type="submit"  class="btn btn-default"  onclick="javascript:if(document.getElementById('seat').value===''){alert('您还没有选择缺勤者！');return false;}else{if(!confirm('确认选择？'))return false;}"  type="submit" value="缺勤提交"></p>
+ <font color=gray>缺席座位为：</font>
+<input type="text" style="width:60px;height:30px;font-size:14px;background-color:white;border:0px solid white;" 
+ id="seat" name="seat" value=""/>
+ </form>
+       </ul>
+    </div>  
+</div>
+<form>
+<table cellspacing="6px">
+{% if current_user.is_authenticated and current_user.can(Permission.WRITE_ARTICLES) %}
+    {%- for i in range(newlesson.room_row) %} 
+        <tr><td style="width:60px;height:25px;font-size:12px;background-color:white;">第{{newlesson.room_row-i}}排：</td>
+           {% for j in range(newlesson.room_column) %}        
+            <td>             
+               <input type="button" style="width:60px;height:20px;font-size:12px;color:gray;background-color:white;border:1px solid gray;" 
+               id="{% if newlesson.room_row-i <= 9  %}0{{ newlesson.room_row-i }}{% else %}{{ newlesson.room_row-i-1 }}{% endif %}{% if j+1 <= 9 %}0{{ newlesson.room_column-j }}{% else %}{{ newlesson.room_column-j }}{% endif %}"
+               onclick="setSeat2('{% if newlesson.room_row-i <= 9  %}0{{ newlesson.room_row-i }}{% else %}{{ newlesson.room_row-i }}{% endif %}{% if j+1 <= 9 %}0{{ newlesson.room_column-j }}{% else %}{{ newlesson.room_column-j }}{% endif %}','{{seats[-i*newlesson.room_column-j-1]}}');"
+               value="{{seats[-i*newlesson.room_column-j-1]}}{{absences[-i*newlesson.room_column-j-1]}} " />                                                                   
+             </td>
+            {% endfor -%}
+        </tr>
+        {% endfor %}
+    </table>
+<ul class="nav nav-tabs">
+
+<br/>
+</ul>
+   <p><h2><b>&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp
+   讲&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp台</b></h2></p> 
+
+    {% endif %}
+{% endif %}
+
+{% if student and lesson.teacher_id != current_user.id %}
+    {% if student.confirm == 1 %}
+<form method="post">
+<input id="submit" name="submit" type="submit"  class="btn btn-default" onclick="javascript:if(document.getElementById('seat').value===''){alert('您还没有选择缺勤者！');return false;}else{if(!confirm('确认选择？'))return false;}"  value="座位提交">                                                                                               
+</p>
+ <font color=gray>选择座位为：</font> <input type="text" style="width:60px;height:30px;font-size:18px;background-color:white;border:0px solid white;" 
+ id="seat" name="seat" value=""/>
+ </form>
+     {% endif %}
+{% endif %}
+</div> 
+{% if lesson.teacher_id != current_user.id %}
+<p><h2><b>讲&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp台</b></h2></p>  
+ </div>
+<form>
+<table cellspacing="6px">
+    {%- for i in range(newlesson.room_row) %}
+            <tr><td style="width:60px;height:25px;font-size:12px;color:gray;background-color:white;" >第{{i+1}}排：</td>
+           {% for j in range(newlesson.room_column) %}    
+            <td>            
+               <input type="button" style="width:60px;height:25px;font-size:12px;background-color:white;border:1px solid gray;"  
+               id="{% if i+1 <= 9  %}0{{ i+1 }}{% else %}{{ i+1 }}{% endif %}{% if j+1 <= 9 %}0{{ j+1 }}{% else %}{{ j+1 }}{% endif %}"
+               onclick="setSeat('{% if i+1 <= 9  %}0{{ i+1 }}{% else %}{{ i+1 }}{% endif %}{% if j+1 <= 9 %}0{{ j+1 }}{% else %}{{ j+1 }}{% endif %}','{{seats[i*newlesson.room_column+j]}}');"
+               value="{{seats[i*newlesson.room_column+j]}}{{absences[i*newlesson.room_column+j]}}"/>
+                 
+            </td>
+            {% endfor -%}
+        </tr>
+    {% endfor %}
+    </table>
+</form>
+{% endif %}
+
+
+
+{% endif %}
+
+
+
+{% endblock %}

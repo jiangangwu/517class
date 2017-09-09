@@ -1,0 +1,10 @@
+{% extends "base.html" %}
+
+{% block title %}{% if english == "yes" %}Hint&nbsp{% else %}提示{% endif %} {{ code }}: {{ name }}{% endblock %}
+
+{% block page_content %}
+<div class="page-header">
+    <h2>{{ code }}: {{ name }}</h2>
+    <p>{{ description }}</p>
+</div>
+{% endblock %}

@@ -1,0 +1,26 @@
+{% extends "base.html" %}
+{% import "bootstrap/wtf.html" as wtf %}
+{% import "_macros.html" as macros %}
+
+{% block title %}{% if english == "yes" %}Write{% else %}发贴{% endif %}{% endblock title %}
+
+{% block page_content %}
+
+<div align=right class="post_footer"><a href="{{ url_for('main.write',tag=tag) }}">{% if english == "yes" %}Single pic{% else %}单图{% endif %}</a></div>
+{% if current_user.is_authenticated and current_user.can(Permission.WRITE_ARTICLES) %}
+
+{{ wtf.quick_form(form) }}
+
+
+{% endif %}
+<br/>
+
+
+
+
+{% endblock %}
+
+{% block scripts %}
+{{ super() }}
+{{ pagedown.include_pagedown() }}
+{% endblock %}

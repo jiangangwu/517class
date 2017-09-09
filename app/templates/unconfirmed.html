@@ -1,0 +1,41 @@
+{% extends "base.html" %}
+
+{% block title %}{% if english == "yes" %}Acount confirm{% else %}账户确认{% endif %}{% endblock %}
+
+{% block page_content %}
+{% if english == "yes" %}
+
+<div class="page-header">
+    <h1>
+        Hello, {{ current_user.username }}!
+    </h1>
+    <h3>You have not confirmed your account yet.</h3>
+    <p>
+        Before you can access this site you need to confirm your account.
+        Check your inbox, you should have received an email with a confirmation link.
+    </p>
+    <p>
+        Need another confirmation email?
+        <a href="{{ url_for('auth.resend_confirmation') }}">Click here</a>
+    </p>
+</div>
+
+{% else %}
+
+<div class="page-header">
+    <h2>
+        您好！ {{ current_user.username }}!
+    </h2>
+    <h3>还没有确认！</h3>
+    <p>
+        需要邮箱确认才能登入。
+        请检查收件箱，您应该已经收到了一个确认链接。
+    </p>
+    <p>
+        需要再发一封确认邮件吗？
+        <a href="{{ url_for('auth.resend_confirmation') }}">点击此处</a>
+    </p>
+</div>
+
+{% endif %}
+{% endblock %}

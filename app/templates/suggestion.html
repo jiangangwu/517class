@@ -1,0 +1,234 @@
+{% extends "base.html" %}
+{% import "bootstrap/wtf.html" as wtf %}
+{% import "_macros.html" as macros %}
+
+{% block title %}{% if english == "yes" %}Suggest{% else %}建议{% endif %}{% endblock %}
+
+{% block page_content %}
+
+{% if english == "yes" %}
+
+<div class="page-header">
+<a class="btn btn-default" href="{{ url_for('.write',tag='suggestion') }}">Suggestion</a>
+</div>
+<div class="post-tabs">
+    <ul class="nav nav-tabs">
+        <li class="active"><a href="{{ url_for('.suggestion',tag='suggestion') }}">Suggestion</a></li>
+  </ul>
+<ul class="posts">
+    {% for post in posts %}
+    <li class="post">
+        <div class="post-thumbnail">
+            <a href="{{ url_for('.user', username=post.author.username) }}">
+         {% if post.author.avatar_file != None  %}               
+               <img class="img-rounded profile-thumbnail" src="{{ post.author.avatar_file }}" height=40 width=40>
+         {% else %}
+               <img class="img-rounded profile-thumbnail" src="{{ post.author.gravatar(size=40) }}">
+         {% endif %}                                                           
+            </a>
+        </div>
+        <div class="post-content">
+            <div class="post-date"><small>{{ moment(post.timestamp).fromNow() }}（{{ moment(post.timestamp).format('YY.MM.DD HH:MM') }}）</small></div>
+            <div class="post-author"><a href="{{ url_for('.user', username=post.author.username) }}">{{ post.author.username }}</a></div>
+            <div class="post-body">
+            
+                {% if post.topic %}
+                    <h2><a href="{{ url_for('.post', id=post.id) }}">{{ post.topic }}</a></h2>
+                {% endif %}
+
+                {% if post.pic and post.pic1 == None %}             
+                <p><img width="256" src="{{ post.pic }}" ></p>                            
+                {% endif %}                                                           
+
+              
+                {% if post.body_html | length > 1000 %}
+                    {{ post.body_html[0:1000] | safe }}
+                    <p></p><p>&nbsp</p>
+                    <p></p><p><a href="{{ url_for('.post', id=post.id) }}">show only 1000 characters, to show full article please click here...</a></p>
+                    {% else %}
+                    {{ post.body_html | safe }}
+                {% endif %}                
+                
+                {% if post.pic and post.pic1 != None %}             
+                <p><img width="256" src="{{ post.pic }}" ></p>                            
+                {% endif %}                                                           
+               {% if post.pic1  != None %}             
+                <p><img width="256" src="{{ post.pic1 }}"></p>                            
+                {% endif %}                                                           
+                {% if post.pic2 != None  %}             
+                <p><img width="256"  src="{{ post.pic2 }}"></p>                            
+                {% endif %}                                                           
+                {% if post.pic3  != None %}             
+                <p><img width="256"  src="{{ post.pic3 }}"></p>                            
+                {% endif %}                                                           
+
+                {% if post.file1 != None %}             
+                <p><a  href="{{ url_for('static',filename=post.file1.replace('/static/','')) }}" >{{ post.filename1 }}</p>                            
+                {% endif %}                                                           
+                {% if post.file2 != None  %}             
+                <p><a  href="{{ url_for('static',filename=post.file2.replace('/static/','')) }}" >{{ post.filename2 }}</p>                            
+                {% endif %}                                                           
+                {% if post.file3 != None  %}             
+                <p><a  href="{{ url_for('static',filename=post.file3.replace('/static/','')) }}" >{{ post.filename3 }}</p>                            
+                {% endif %}                                                           
+                {% if post.file4 != None  %}             
+                <p><a  href="{{ url_for('static',filename=post.file.replace('/static/','')) }}" >{{ post.filename }}</p>                            
+                {% endif %}                                                           
+
+            </div>
+            <div class="post-footer">
+                {% if current_user == post.author and post.private==True %}
+                    <span style="background-color:#FFFFFF;color:#777777" class="label label-default">Private</span>
+                {% endif %}
+
+                {% if current_user == post.author %}
+                    {% if current_user == post.author and (post.file1 !=None or post.pic1 != None) %}
+                    <a href="{{ url_for('.edit2', id=post.id) }}">
+                        <span class="label label-primary">Edit</span>
+                    </a>
+                    {% else %}
+                    <a href="{{ url_for('.edit', id=post.id) }}">
+                        <span class="label label-primary">Edit</span>
+                    </a>
+                    {% endif %}       
+                {% endif %}       
+
+                {% if current_user.is_administrator() %}
+                <a href="{{ url_for('.edit', id=post.id) }}">
+                    <span class="label label-danger">Edit [Admin]</span>
+                </a>
+                {% endif %}   
+         
+                <a href="{{ url_for('.post', id=post.id) }}#comments">
+                    <span class="label label-primary">{{ post.comments.count() }} 评论</span>
+                </a>
+            </div>
+        </div>
+    </li>
+    {% endfor %}
+</ul>
+
+</div>
+
+
+
+{% else %}
+
+<div class="page-header">
+<a class="btn btn-default" href="{{ url_for('.write',tag='suggestion') }}">提出建议</a>
+</div>
+<div class="post-tabs">
+    <ul class="nav nav-tabs">
+        <li class="active"><a href="{{ url_for('.suggestion',tag='suggestion') }}">建议</a></li>
+  </ul>
+<ul class="posts">
+    {% for post in posts %}
+    <li class="post">
+        <div class="post-thumbnail">
+            <a href="{{ url_for('.user', username=post.author.username) }}">
+         {% if post.author.avatar_file != None  %}               
+               <img class="img-rounded profile-thumbnail" src="{{ post.author.avatar_file }}" height=40 width=40>
+         {% else %}
+               <img class="img-rounded profile-thumbnail" src="{{ post.author.gravatar(size=40) }}">
+         {% endif %}                                                           
+            </a>
+        </div>
+        <div class="post-content">
+            <div class="post-date"><small>{{ moment(post.timestamp).fromNow() }}（{{ moment(post.timestamp).format('YY.MM.DD HH:MM') }}）</small></div>
+            <div class="post-author"><a href="{{ url_for('.user', username=post.author.username) }}">{{ post.author.username }}</a></div>
+            <div class="post-body">
+            
+                {% if post.topic %}
+                    <h2><a href="{{ url_for('.post', id=post.id) }}">{{ post.topic }}</a></h2>
+                {% endif %}
+
+                {% if post.pic and post.pic1 == None %}             
+                <p><img width="256" src="{{ post.pic }}" ></p>                            
+                {% endif %}                                                           
+
+              
+                {% if post.body_html | length > 1000 %}
+                    {{ post.body_html[0:1000] | safe }}
+                    <p></p><p>&nbsp</p>
+                    <p></p><p><a href="{{ url_for('.post', id=post.id) }}">仅显示1000字，查看全文，请点此处……</a></p>
+                    {% else %}
+                    {{ post.body_html | safe }}
+                {% endif %}                
+                
+                {% if post.pic and post.pic1 != None %}             
+                <p><img width="256" src="{{ post.pic }}" ></p>                            
+                {% endif %}                                                           
+               {% if post.pic1  != None %}             
+                <p><img width="256" src="{{ post.pic1 }}"></p>                            
+                {% endif %}                                                           
+                {% if post.pic2 != None  %}             
+                <p><img width="256"  src="{{ post.pic2 }}"></p>                            
+                {% endif %}                                                           
+                {% if post.pic3  != None %}             
+                <p><img width="256"  src="{{ post.pic3 }}"></p>                            
+                {% endif %}                                                           
+
+                {% if post.file1 != None %}             
+                <p><a  href="{{ url_for('static',filename=post.file1.replace('/static/','')) }}" >{{ post.filename1 }}</p>                            
+                {% endif %}                                                           
+                {% if post.file2 != None  %}             
+                <p><a  href="{{ url_for('static',filename=post.file2.replace('/static/','')) }}" >{{ post.filename2 }}</p>                            
+                {% endif %}                                                           
+                {% if post.file3 != None  %}             
+                <p><a  href="{{ url_for('static',filename=post.file3.replace('/static/','')) }}" >{{ post.filename3 }}</p>                            
+                {% endif %}                                                           
+                {% if post.file4 != None  %}             
+                <p><a  href="{{ url_for('static',filename=post.file.replace('/static/','')) }}" >{{ post.filename }}</p>                            
+                {% endif %}                                                           
+
+            </div>
+            <div class="post-footer">
+                {% if current_user == post.author and post.private==True %}
+                    <span style="background-color:#FFFFFF;color:#777777" class="label label-default">私有</span>
+                {% endif %}
+
+                {% if current_user == post.author %}
+                    {% if current_user == post.author and (post.file1 !=None or post.pic1 != None) %}
+                    <a href="{{ url_for('.edit2', id=post.id) }}">
+                        <span class="label label-primary">编辑</span>
+                    </a>
+                    {% else %}
+                    <a href="{{ url_for('.edit', id=post.id) }}">
+                        <span class="label label-primary">编辑</span>
+                    </a>
+                    {% endif %}       
+                {% endif %}       
+
+                {% if current_user.is_administrator() %}
+                <a href="{{ url_for('.edit', id=post.id) }}">
+                    <span class="label label-danger">编辑 [Admin]</span>
+                </a>
+                {% endif %}   
+         
+                <a href="{{ url_for('.post', id=post.id) }}#comments">
+                    <span class="label label-primary">{{ post.comments.count() }} 评论</span>
+                </a>
+            </div>
+        </div>
+    </li>
+    {% endfor %}
+</ul>
+
+</div>
+
+
+{% endif %}
+
+
+{% if pagination %}
+<div class="pagination">
+    {{ macros.pagination_widget(pagination, '.index') }}
+</div>
+{% endif %}
+{% endblock %}
+
+{% block scripts %}
+{{ super() }}
+{{ pagedown.include_pagedown() }}
+
+{% endblock %}

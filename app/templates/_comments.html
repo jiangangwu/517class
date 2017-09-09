@@ -1,0 +1,111 @@
+{% if english == "yes" %}
+    
+    
+    <ul class="comments">
+        {% for comment in comments %}
+        <li class="comment">
+            <div class="comment-thumbnail">
+                <a href="{{ url_for('.user', username=comment.author.username) }}">
+             {% if comment.author.avatar_file != None  %}               
+                   <img class="img-rounded profile-thumbnail" src="{{ comment.author.avatar_file }}" height=40 width=40>
+             {% else %}
+                   <img class="img-rounded profile-thumbnail" src="{{ comment.author.gravatar(size=40) }}">
+             {% endif %}                                                           
+                </a>
+            </div>
+            <div class="comment-content">
+                <div class="comment-date">{{ moment(comment.timestamp).fromNow() }}</div>
+                <div class="comment-author"><a href="{{ url_for('.user', username=comment.author.username) }}">{{ comment.author.username }}</a></div>
+                <div class="comment-body">
+                    {% if comment.disabled %}
+                    <p><i>The comment has been set invalid by administrator.</i></p>
+                    {% endif %}
+                    {% if moderate or not comment.disabled %}
+                        {% if comment.body_html %}
+                            {{ comment.body_html | safe }}
+                        {% else %}
+                            {{ comment.body }}
+                        {% endif %}
+                    {% endif %}
+                </div>
+                {% if moderate %}
+                    <br>
+                    {% if comment.disabled %}
+                    <a class="btn btn-default btn-xs" href="{{ url_for('.moderate_enable', id=comment.id, page=page) }}">Make valid</a>
+                    {% else %}
+                    <a class="btn btn-danger btn-xs" href="{{ url_for('.moderate_disable', id=comment.id, page=page) }}">Make invalid</a>
+                    {% endif %}
+                {% endif %}
+    
+                {% if comment.author_id == current_user.id %}
+                    <br>
+                <div align=right class="post_footer"><a onclick='if(confirm("Confirm to delete?")==true)window.location.href=
+                    "{{ url_for('.del_comment',id=comment.id,id2=post.id) }}";' style='text-decoration:none;'>
+                       <span class="label label-default">Delete</span></a> 
+                </div>   
+                {% endif %}
+    
+            </div>
+        </li>
+        {% endfor %}
+    </ul>
+    
+    
+    
+
+
+{% else %}
+
+    
+    
+    <ul class="comments">
+        {% for comment in comments %}
+        <li class="comment">
+            <div class="comment-thumbnail">
+                <a href="{{ url_for('.user', username=comment.author.username) }}">
+             {% if comment.author.avatar_file != None  %}               
+                   <img class="img-rounded profile-thumbnail" src="{{ comment.author.avatar_file }}" height=40 width=40>
+             {% else %}
+                   <img class="img-rounded profile-thumbnail" src="{{ comment.author.gravatar(size=40) }}">
+             {% endif %}                                                           
+                </a>
+            </div>
+            <div class="comment-content">
+                <div class="comment-date">{{ moment(comment.timestamp).fromNow() }}</div>
+                <div class="comment-author"><a href="{{ url_for('.user', username=comment.author.username) }}">{{ comment.author.username }}</a></div>
+                <div class="comment-body">
+                    {% if comment.disabled %}
+                    <p><i>该评论被协管员设为无效。</i></p>
+                    {% endif %}
+                    {% if moderate or not comment.disabled %}
+                        {% if comment.body_html %}
+                            {{ comment.body_html | safe }}
+                        {% else %}
+                            {{ comment.body }}
+                        {% endif %}
+                    {% endif %}
+                </div>
+                {% if moderate %}
+                    <br>
+                    {% if comment.disabled %}
+                    <a class="btn btn-default btn-xs" href="{{ url_for('.moderate_enable', id=comment.id, page=page) }}">使有效</a>
+                    {% else %}
+                    <a class="btn btn-danger btn-xs" href="{{ url_for('.moderate_disable', id=comment.id, page=page) }}">使无效</a>
+                    {% endif %}
+                {% endif %}
+    
+                {% if comment.author_id == current_user.id %}
+                    <br>
+                <div align=right class="post_footer"><a onclick='if(confirm("确认删除？")==true)window.location.href=
+                    "{{ url_for('.del_comment',id=comment.id,id2=post.id) }}";' style='text-decoration:none;'>
+                       <span class="label label-default">删除</span></a> 
+                </div>   
+                {% endif %}
+    
+            </div>
+        </li>
+        {% endfor %}
+    </ul>
+
+
+{% endif %}

@@ -1,0 +1,38 @@
+{% extends "base.html" %}
+{% import "bootstrap/wtf.html" as wtf %}
+{% import "_macros.html" as macros %}
+
+{% block title %}{% if english == "yes" %}Edit the blog{% else %}编辑帖子{% endif %}{% endblock %}
+{% block page_content %}
+
+{% if english == "yes" %}
+
+
+<div align=right class="post_footer"><a onclick='if(confirm("Confirm to delete? ")==true)window.location.href=
+    "{{ url_for('.del_post',id=id) }}";' style='text-decoration:none;'>
+       <span class="label label-default">Delete</span></a> 
+       &nbsp&nbsp<a href="{{ url_for('main.edit2',id=id) }}">Multi-media edit</a> 
+</div>
+ 
+
+{% else %}
+
+
+<div align=right class="post_footer"><a onclick='if(confirm("确认删除？")==true)window.location.href=
+    "{{ url_for('.del_post',id=id) }}";' style='text-decoration:none;'>
+       <span class="label label-default">删除</span></a> 
+       &nbsp&nbsp<a href="{{ url_for('main.edit2',id=id) }}">多媒体</a> 
+</div>
+ 
+{% endif %}
+
+
+{{ wtf.quick_form(form) }}
+<br/><br/><br/><br/><br/><br/>
+ 
+{% endblock %}
+
+{% block scripts %}
+{{ super() }}
+{{ pagedown.include_pagedown() }}
+{% endblock %}

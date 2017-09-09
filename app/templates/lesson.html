@@ -1,0 +1,324 @@
+{% extends "base.html" %}
+{% import "_macros.html" as macros %}
+
+{% block title %}{{ lesson.lesson_name }}{% endblock %}
+
+{% block page_content %}
+
+{% if english == "yes" %}
+    <div class="page-header">
+        {% if lesson.teacher_id == current_user.id %}
+            <a href="{{ url_for('main.change_lesson_pic',id=lesson.id) }}" title="Change portrait">
+                 {% if lesson.pic != None %}               
+                       <img class="img-rounded profile-thumbnail" src="{{ lesson.pic }}" width=200>
+                 {% else %}
+                       <img class="img-rounded profile-thumbnail" src="{{ user_teacher.gravatar(size=200) }}">
+                 {% endif %}                                                           
+            </a>
+        {% else %}
+             {% if lesson.pic != None %}               
+                 <img class="img-rounded profile-thumbnail" src="{{ lesson.pic }}" width=200>
+             {% else %}
+                 <img class="img-rounded profile-thumbnail" src="{{ user_teacher.gravatar(size=200) }}">
+             {% endif %}   
+        {% endif %}   
+        <div class="profile-header">
+        
+            <h3>{{ lesson.lesson_name }}</h3>
+             <small><p><a href="{{url_for('.teacher',id=user_teacher.id)}}">{{ user_teacher.name }}</a>&nbspfrom&nbsp{{ teacher.school }}</p></small>
+             <small><p>Date of creating the lesson: {{ moment(lesson.timestamp).fromNow() }}</p></small>
+            <p>
+                <a href="{{ url_for('.show_all_class',id=lesson.id) }}"><small>Class</small><span class="badge">{{ lesson.count_newlesson() }}</span></a>       
+                &nbsp&nbsp<a href="{{ url_for('.show_all_file',id=lesson.id) }}"><small>File</small><span class="badge">{{ lesson.count_file() }}</span></a>
+                <br><a href="{{ url_for('.show_all_discussion',id=lesson.id) }}"><small>Discussion</small><span class="badge">{{ lesson.count_discussion() }}</span></a>
+                &nbsp&nbsp<a href="{{ url_for('.show_all_student',id=lesson.id) }}"><small>Student</small><span class="badge">{{ lesson.count_student() }}</span></a>
+            </p>
+             {% if current_user==user_teacher %}
+                 <small><p><a href="{{url_for('main.edit_lesson',id=lesson.id)}}">Modify lesson profile</a></p>
+                 <p><a href="{{url_for('main.upload_lesson_file',id=lesson.id)}}">Upload a file</a></p>
+                 <p><a class="btn btn-default" href="{{url_for('main.open_new_lesson',id=lesson.id)}}">Open a new class</a></p></small>
+             {% else %}        
+                 <p>Selected class:</p>  
+                 {% if mylessons %}
+                     {% for mylesson in mylessons %}
+                         <p><a href="{{url_for('main.current_lesson',newlesson_id=mylesson.id)}}">{{ mylesson.year }}{{ mylesson.season }}</a></p>
+                     {% endfor %}
+                 {% endif %}
+             {% endif %}
+        </div>
+    </div>
+    <div class="post-tabs">
+        <ul class="nav nav-tabs">
+            <li {% if show_all_class != "1" and show_all_class != "2" and show_all_class != "3" and show_all_class != "4" %} class="active"{% endif %}><a href="{{ url_for('.show_about_lesson',id=lesson.id) }}">About</a></li>
+            <li {% if show_all_class == "1" %} class="active"{% endif %}><a href="{{ url_for('.show_all_class',id=lesson.id) }}">Class</a></li>
+            <li {% if show_all_class == "2" %} class="active"{% endif %}><a href="{{ url_for('.show_all_file',id=lesson.id) }}">File</a></li>
+            <li {% if show_all_class == "3" %} class="active"{% endif %}><a href="{{ url_for('.show_all_discussion',id=lesson.id) }}">Discussion</a></li>
+            <li {% if show_all_class == "4" %} class="active"{% endif %}><a href="{{ url_for('.show_all_student',id=lesson.id) }}">Student</a></li>
+        </ul>
+    </div>  
+    <div class="post-body">
+        {% if show_all_class != "1" and show_all_class != "2" and show_all_class != "3" and show_all_class != "4" %}
+            <br>
+            {% if lesson.about_lesson %}
+                {{ lesson.about_lesson_html | safe }}
+            {% endif %}
+            {% if lesson.file1 != None  %}             
+                <p><a  href="{{ url_for('static',filename=lesson.file1.replace('/static/','')) }}" >{{ lesson.filename1 }}</p>                            
+            {% endif %}                                                           
+            {% if lesson.file2 != None %}             
+                <p><a  href="{{ url_for('static',filename=lesson.file2.replace('/static/','')) }}" >{{ lesson.filename2 }}</p>                            
+            {% endif %}                                                           
+            {% if lesson.file3 != None  %}             
+                <p><a  href="{{ url_for('static',filename=lesson.file3.replace('/static/','')) }}" >{{ lesson.filename3 }}</p>                            
+            {% endif %}                                                           
+            {% if lesson.file4 != None  %}             
+                <p><a  href="{{ url_for('static',filename=lesson.file4.replace('/static/','')) }}" >{{ lesson.filename4 }}</p>                            
+            {% endif %}                                                           
+            {% if lesson.file5 != None  %}             
+                <p><a  href="{{ url_for('static',filename=lesson.file5.replace('/static/','')) }}" >{{ lesson.filename5 }}</p>                            
+            {% endif %}                                                           
+            {% if lesson.file6 != None  %}             
+                <p><a  href="{{ url_for('static',filename=lesson.file6.replace('/static/','')) }}" >{{ lesson.filename6 }}</p>                            
+            {% endif %}                                                           
+            {% if lesson.file7 != None  %}             
+                <p><a  href="{{ url_for('static',filename=lesson.file7.replace('/static/','')) }}" >{{ lesson.filename7 }}</p>                            
+            {% endif %}                                                           
+            {% if lesson.file8 != None  %}             
+                <p><a  href="{{ url_for('static',filename=lesson.file8.replace('/static/','')) }}" >{{ lesson.filename8 }}</p>                            
+            {% endif %}  
+        {% endif %}                                                             
+         {% if show_all_class == "1" %} 
+            {% if newlessons %}
+            <br><table cellspacing='0'  border='1' bordercolor='#D0D0D0' cellpadding='4' align='left'>
+            <th>Classes</th><th>About</th><th>Date of being created</th>{%if current_user!=user_teacher %}<th>Operation</th>{%endif%}
+                {% for newlesson in newlessons %}
+                    <tr><td><a href="{{url_for('main.current_lesson',newlesson_id=newlesson.id)}}">{{ newlesson.year }}{{ newlesson.season }}</a></td>
+                        <td>{{newlesson.about}}</td><td>{{moment(newlesson.timestamp).format("YY/MM/DD")}}</td>
+                        {%if current_user!=user_teacher %}<td><a class="btn btn-default" href="{{url_for('main.select_lesson',newlesson_id=newlesson.id)}}">Apply to select</a></td>{%endif%}
+                    </tr>
+                {% endfor %}
+                </table>
+            {% endif %}
+        {% endif %}
+        {% if show_all_class == "2" %}
+            {% for lf in lesson_files %}
+                {% if lf[1].filetype == "document" %}
+                    <br><a href={{url_for("static",filename=lf[1].file | replace("/static/","")) }}>{{lf[1].filename}}</a>
+                    &nbsp&nbsp{%if current_user==user_teacher %}&nbsp&nbsp<a href={{url_for(".edit_lesson_file",file_id=lf[1].id,lesson_id=lf[0].id)}}>Edit</a>{%endif%}
+                    <br/>
+                    &nbsp&nbsp&nbsp&nbsp&nbsp&nbsp<small><i>{%if lf[1].about != None %}{{lf[1].about}}{% endif %}</i></small><br/><br/>
+                                
+                {% elif lf[1].filetype == "audio" %}
+                    <br><a  href="{{ url_for('static',filename=lf[1].file.replace('/static/','')) }}" >{{ lf[1].filename }}</a>
+                    {%if current_user==user_teacher %}&nbsp&nbsp<a href={{url_for(".edit_lesson_file",file_id=lf[1].id,lesson_id=lf[0].id)}}>Edit</a>{%endif%}
+                         <br>
+                    &nbsp&nbsp&nbsp&nbsp&nbsp&nbsp<small><i>{%if lf[1].about != None %}{{lf[1].about}}{% endif %}</i></small><br/><br/>
+                        <audio controls="controls" >
+                               <source src="{{ url_for('static',filename=lf[1].file.replace('/static/','')) }}" />
+                                              Your browser does not support the audio tag.
+                         </audio>
+                    </p>  <br/>                          
+                {% elif lf[1].filetype == "picture" %}
+                    <br><a  href="{{ url_for('static',filename=lf[1].file.replace('/static/','')) }}" >{{ lf[1].filename }}</a>
+                         &nbsp&nbsp{%if current_user==user_teacher %}&nbsp&nbsp<a href={{url_for(".edit_lesson_file",file_id=lf[1].id,lesson_id=lf[0].id)}}>Edit</a>{%endif%}
+                         <br>
+                    &nbsp&nbsp&nbsp&nbsp&nbsp&nbsp<small><i>{%if lf[1].about != None %}{{lf[1].about}}{% endif %}</i></small><br/><br/>
+                        <img width="256" name="{{'pic'+lf[1].id | string }}" onclick="if({{'pic'+lf[1].id | string }}.width==256){{'pic'+lf[1].id | string }}.width=512;else{ {{'pic'+lf[1].id | string }}.width=256;}"  src="{{ url_for('static',filename=lf[1].file.replace('/static/','')) }}" />
+                    </p>  <br/>                          
+                {% else %}
+                     <br><a  href="{{ url_for('static',filename=lf[1].file.replace('/static/','')) }}" >{{ lf[1].filename }}</a>{%if current_user==user_teacher %}&nbsp&nbsp<a href={{url_for(".edit_lesson_file",file_id=lf[1].id,lesson_id=lf[0].id)}}>Edit</a>{%endif%}<br><br>
+                    &nbsp&nbsp&nbsp&nbsp&nbsp&nbsp<small><i>{%if lf[1].about != None %}{{lf[1].about}}{% endif %}</i></small><br/><br/>
+                         <video width="256" controls="controls" >
+                               <source type='video/webm; codecs="vp8.0, vorbis"' src="{{ url_for('static',filename=lf[1].file.replace('/static/','')) }}"/>
+                               <source type='video/ogg; codecs="theora, vorbis"'  src="{{ url_for('static',filename=lf[1].file.replace('/static/','')) }}"/>
+                               <source type='video/mp4; codecs="avc1.4D401E, mp4a.40.2"' src="{{ url_for('static',filename=lf[1].file.replace('/static/','')) }}"/>
+                                              Your browser does not support the video tag.
+                         </video>
+                    </p>                    
+                    {% endif %}
+                
+            {% endfor %}
+            </table>
+        {% endif %}
+        {% if show_all_class == "3" %}
+            <br><table cellspacing='0'  border='1' bordercolor='#D0D0D0' cellpadding='4' align='left'>
+            <th>Username</th><th>Real Name</th><th>Topic</th><th>Lesson</th>
+            {% for ld in lesson_discussions %}
+                <tr><td><a href={{url_for(".user",username=ld[3].username) }}>{{ld[3].username}}</a></td><td>{{ld[3].name}}</td><td><a href="{{ url_for('.post',id=ld[2].id) }}">{{ld[2].topic}}</a></td><td>{{ld[0].lesson_name+ld[1].year+ld[1].season}}</td></tr>
+            {% endfor %}
+            </table>
+        {% endif %}
+        {% if show_all_class == "4" %}
+            <br><table cellspacing='0'  border='1' bordercolor='#D0D0D0' cellpadding='4' align='left'>
+            <th>Username</th><th>Real Name</th><th>Lesson</th>
+            {% for ls in lesson_students %}
+                <tr><td><a href={{url_for(".user",username=ls[2].username) }}>{{ls[2].username}}</a></td><td>{{ls[2].name}}</td><td>{{ls[0].lesson_name+ls[1].year+ls[1].season}}</td></tr>
+            {% endfor %}
+            </table>
+            
+        {% endif %}
+        <br><br><br><br><br><br><br><br>
+    </div>
+{% else %}
+    <div class="page-header">
+    {% if lesson.teacher_id == current_user.id %}
+        <a href="{{ url_for('main.change_lesson_pic',id=lesson.id) }}" title="更换头像">
+             {% if lesson.pic != None %}               
+                   <img class="img-rounded profile-thumbnail" src="{{ lesson.pic }}" width=200>
+             {% else %}
+                   <img class="img-rounded profile-thumbnail" src="{{ user_teacher.gravatar(size=200) }}">
+             {% endif %}                                                           
+        </a>
+    {% else %}
+         {% if lesson.pic != None %}               
+             <img class="img-rounded profile-thumbnail" src="{{ lesson.pic }}" width=200>
+         {% else %}
+             <img class="img-rounded profile-thumbnail" src="{{ user_teacher.gravatar(size=200) }}">
+         {% endif %}   
+    {% endif %}
+        <div class="profile-header">
+            <h3>{{ lesson.lesson_name }}</h3>
+             <small><p><a href="{{url_for('.teacher',id=user_teacher.id)}}">{{ user_teacher.name }}</a>&nbspfrom&nbsp{{ teacher.school }}</p></small>
+             <small><p>开课日: {{ moment(lesson.timestamp).fromNow() }}</p></small>
+            <p>
+                <a href="{{ url_for('.show_all_class',id=lesson.id) }}"><small>班级</small><span class="badge">{{ lesson.count_newlesson() }}</span></a>       
+                &nbsp&nbsp<a href="{{ url_for('.show_all_file',id=lesson.id) }}"><small>文件</small><span class="badge">{{ lesson.count_file() }}</span></a>
+            </p>
+            <p>    
+                <a href="{{ url_for('.show_all_discussion',id=lesson.id) }}"><small>讨论</small><span class="badge">{{ lesson.count_discussion() }}</span></a>
+                &nbsp&nbsp<a href="{{ url_for('.show_all_student',id=lesson.id) }}"><small>学生</small><span class="badge">{{ lesson.count_student() }}</span></a>
+            </p>
+                                         
+             {% if current_user==user_teacher %}
+                 <small><p><a href="{{url_for('main.edit_lesson',id=lesson.id)}}">修改课程资料</a></p>
+                 <p><a href="{{url_for('main.upload_lesson_file',id=lesson.id)}}">上传文件</a></p>
+                 <p><a class="btn btn-default" href="{{url_for('main.open_new_lesson',id=lesson.id)}}">开新班</a></p></small>
+             {% else %}        
+                 <p><small>所选班：</small>  
+                 {% if mylessons %}
+                     {% for mylesson in mylessons %}
+                         <a href="{{url_for('main.current_lesson',newlesson_id=mylesson.id)}}">{{ mylesson.year }}{{ mylesson.season }}</a></p>
+                     {% endfor %}
+                 {% endif %}
+             {% endif %}
+        </div>
+    </div>
+    <div class="post-tabs">
+        <ul class="nav nav-tabs">
+            <li {% if show_all_class != "1" and show_all_class != "2" and show_all_class != "3" and show_all_class != "4" %} class="active"{% endif %}><a href="{{ url_for('.show_about_lesson',id=lesson.id) }}">关于</a></li>
+            <li {% if show_all_class == "1" %} class="active"{% endif %}><a href="{{ url_for('.show_all_class',id=lesson.id) }}">班级</a></li>
+            <li {% if show_all_class == "2" %} class="active"{% endif %}><a href="{{ url_for('.show_all_file',id=lesson.id) }}">文件</a></li>
+            <li {% if show_all_class == "3" %} class="active"{% endif %}><a href="{{ url_for('.show_all_discussion',id=lesson.id) }}">讨论</a></li>
+            <li {% if show_all_class == "4" %} class="active"{% endif %}><a href="{{ url_for('.show_all_student',id=lesson.id) }}">学生</a></li>
+        </ul>
+    </div>  
+    <div class="post-body">
+        {% if show_all_class != "1" and show_all_class != "2" and show_all_class != "3" and show_all_class != "4" %}
+            <br/>
+            {% if lesson.about_lesson %}
+                {{ lesson.about_lesson_html | safe }}
+            {% endif %}
+            {% if lesson.file1 != None  %}             
+                <p><a  href="{{ url_for('static',filename=lesson.file1.replace('/static/','')) }}" >{{ lesson.filename1 }}</p>                            
+            {% endif %}                                                           
+            {% if lesson.file2 != None %}             
+                <p><a  href="{{ url_for('static',filename=lesson.file2.replace('/static/','')) }}" >{{ lesson.filename2 }}</p>                            
+            {% endif %}                                                           
+            {% if lesson.file3 != None  %}             
+                <p><a  href="{{ url_for('static',filename=lesson.file3.replace('/static/','')) }}" >{{ lesson.filename3 }}</p>                            
+            {% endif %}                                                           
+            {% if lesson.file4 != None  %}             
+                <p><a  href="{{ url_for('static',filename=lesson.file4.replace('/static/','')) }}" >{{ lesson.filename4 }}</p>                            
+            {% endif %}                                                           
+            {% if lesson.file5 != None  %}             
+                <p><a  href="{{ url_for('static',filename=lesson.file5.replace('/static/','')) }}" >{{ lesson.filename5 }}</p>                            
+            {% endif %}                                                           
+            {% if lesson.file6 != None  %}             
+                <p><a  href="{{ url_for('static',filename=lesson.file6.replace('/static/','')) }}" >{{ lesson.filename6 }}</p>                            
+            {% endif %}                                                           
+            {% if lesson.file7 != None  %}             
+                <p><a  href="{{ url_for('static',filename=lesson.file7.replace('/static/','')) }}" >{{ lesson.filename7 }}</p>                            
+            {% endif %}                                                           
+            {% if lesson.file8 != None  %}             
+                <p><a  href="{{ url_for('static',filename=lesson.file8.replace('/static/','')) }}" >{{ lesson.filename8 }}</p>                            
+            {% endif %}  
+        {% endif %}                                                             
+        {% if show_all_class == "1" %} 
+            {% if newlessons  %}
+            <br><table cellspacing='0'  border='1' bordercolor='#D0D0D0' cellpadding='4' align='left'>
+            <th>班级</th><th>说明</th><th>创建日</th>{%if current_user!=user_teacher %}<th>操作</th>{%endif%}
+                {% for newlesson in newlessons %}
+                    <tr><td><a href="{{url_for('main.current_lesson',newlesson_id=newlesson.id)}}">{{ newlesson.year }}{{ newlesson.season }}</a></td>
+                        <td>{{newlesson.about}}</td><td>{{moment(newlesson.timestamp).format("YY/MM/DD")}}</td>
+                        {%if current_user!=user_teacher %}<td><a class="btn btn-default" href="{{url_for('main.select_lesson',newlesson_id=newlesson.id)}}">申请选修</a></td>{%endif%}
+                    </tr>
+                {% endfor %}
+                </table>
+            {% endif %}
+        {% endif %}
+        {% if show_all_class == "2" %}
+            {% for lf in lesson_files %}
+                {% if lf[1].filetype == "document" %}
+                    <br><a href={{url_for("static",filename=lf[1].file | replace("/static/","")) }}>{{lf[1].filename}}</a>
+                    &nbsp&nbsp{%if current_user==user_teacher %}&nbsp&nbsp<a href={{url_for(".edit_lesson_file",file_id=lf[1].id,lesson_id=lf[0].id)}}>编辑</a>{%endif%}
+                    <br/>
+                    &nbsp&nbsp&nbsp&nbsp&nbsp&nbsp<small><i>{%if lf[1].about != None %}{{lf[1].about}}{% endif %}</i></small><br/><br/>
+                                
+                {% elif lf[1].filetype == "audio" %}
+                    <br><a  href="{{ url_for('static',filename=lf[1].file.replace('/static/','')) }}" >{{ lf[1].filename }}</a>
+                    &nbsp&nbsp{%if current_user==user_teacher %}&nbsp&nbsp<a href={{url_for(".edit_lesson_file",file_id=lf[1].id,lesson_id=lf[0].id)}}>编辑</a>{%endif%}
+                     <br>
+                    &nbsp&nbsp&nbsp&nbsp&nbsp&nbsp<small><i>{%if lf[1].about != None %}{{lf[1].about}}{% endif %}</i></small><br/><br/>
+                        <audio controls="controls" >
+                               <source src="{{ url_for('static',filename=lf[1].file.replace('/static/','')) }}" />
+                                              Your browser does not support the audio tag.
+                         </audio>
+                    </p>  
+                    <br/>                          
+                {% elif lf[1].filetype == "picture" %}
+                    <br><a  href="{{ url_for('static',filename=lf[1].file.replace('/static/','')) }}" >{{ lf[1].filename }}</a>
+                    &nbsp&nbsp{%if current_user==user_teacher %}&nbsp&nbsp<a href={{url_for(".edit_lesson_file",file_id=lf[1].id,lesson_id=lf[0].id)}}>编辑</a>{%endif%}
+                    <br>
+                    &nbsp&nbsp&nbsp&nbsp&nbsp&nbsp<small><i>{%if lf[1].about != None %}{{lf[1].about}}{% endif %}</i></small><br/><br/>
+                     <img width="256" name="{{'pic'+lf[1].id | string }}" onclick="if({{'pic'+lf[1].id | string }}.width==256){{'pic'+lf[1].id | string }}.width=512;else{ {{'pic'+lf[1].id | string }}.width=256;}"  src="{{ url_for('static',filename=lf[1].file.replace('/static/','')) }}" />
+                    </p>
+                    <br/>                          
+                {% else %}
+                     <br><a  href="{{ url_for('static',filename=lf[1].file.replace('/static/','')) }}" >{{ lf[1].filename }}</a>
+                     &nbsp&nbsp{%if current_user==user_teacher %}&nbsp&nbsp<a href={{url_for(".edit_lesson_file",file_id=lf[1].id,lesson_id=lf[0].id)}}>编辑</a>{%endif%}
+                         <br>
+                         &nbsp&nbsp&nbsp&nbsp&nbsp&nbsp<small><i>{%if lf[1].about != None %}{{lf[1].about}}{% endif %}</i></small><br/><br/>
+                         <video width="256" controls="controls" >
+                               <source type='video/webm; codecs="vp8.0, vorbis"' src="{{ url_for('static',filename=lf[1].file.replace('/static/','')) }}"/>
+                               <source type='video/ogg; codecs="theora, vorbis"'  src="{{ url_for('static',filename=lf[1].file.replace('/static/','')) }}"/>
+                               <source type='video/mp4; codecs="avc1.4D401E, mp4a.40.2"' src="{{ url_for('static',filename=lf[1].file.replace('/static/','')) }}"/>
+                                              Your browser does not support the video tag.
+                         </video>
+                    </p>                    
+                    {% endif %}
+            {% endfor %}
+            </table>
+        {% endif %}
+        {% if show_all_class == "3" %}
+            <br><table cellspacing='0'  border='1' bordercolor='#D0D0D0' cellpadding='4' align='left'>
+            <th>网名</th><th>真名</th><th>标题</th><th>课程</th>
+            {% for ld in lesson_discussions %}
+                <tr><td><a href={{url_for(".user",username=ld[3].username) }}>{{ld[3].username}}</a></td><td>{{ld[3].name}}</td><td><a href="{{ url_for('.post',id=ld[2].id) }}">{{ld[2].topic}}</a></td><td>{{ld[0].lesson_name+ld[1].year+ld[1].season}}</td></tr>
+            {% endfor %}
+            </table>
+             <br><br><br><br><br><br><br><br> <br><br><br><br><br><br><br><br>
+        {% endif %}
+        {% if show_all_class == "4" %}
+            <br><table cellspacing='0'  border='1' bordercolor='#D0D0D0' cellpadding='4' align='left'>
+            <th>网名</th><th>真名</th><th>课程</th>
+            {% for ls in lesson_students %}
+                <tr><td><a href={{url_for(".user",username=ls[2].username) }}>{{ls[2].username}}</a></td><td>{{ls[2].name}}</td><td>{{ls[0].lesson_name+ls[1].year+ls[1].season}}</td></tr>
+            {% endfor %}
+            </table>
+             <br><br><br><br><br><br><br><br> <br><br><br><br><br><br><br><br> <br><br><br><br><br><br><br><br>
+        {% endif %}
+ 
+{% endif %}
+ <br><br><br><br><br><br><br><br> <br><br><br><br><br><br><br><br>
+{% endblock %}
+

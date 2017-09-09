@@ -1,0 +1,102 @@
+{% extends "base.html" %}
+{% import "bootstrap/wtf.html" as wtf %}
+{% import "_macros.html" as macros %}
+
+{% block title %}{% if english == "yes" %}Sent comments{% else %}发出的评论{% endif %}{% endblock %}
+
+{% block page_content %}
+
+{% if english == "yes" %}
+
+
+
+
+<div class="page-header"><h2>Sent comments</h2></div>
+<div class="post-body">
+{% for pc in post_comments %}
+    {% if pc[0] != "The original blog has been deleted." %}
+      <div class="post-content">
+            <p>
+          <div class="comment-thumbnail">
+         <a href="{{ url_for('.user', username=pc[0].author.username) }}">
+         {% if pc[0].author.avatar_file != None %}               
+               <img class="img-rounded profile-thumbnail" src="{{ pc[0].author.avatar_file }}" height=25 width=25>
+         {% else %}
+               <img class="img-rounded profile-thumbnail" src="{{ pc[0].author.gravatar(size=25) }}">
+         {% endif %}                                                           
+            </a></p>
+        </div>&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp
+          <a href="{{ url_for('.user', username=pc[0].author.username) }}"> {{pc[0].author.username}}<a/>：
+             <a href="{{ url_for('.post', id=pc[0].id) }}">{{ pc[0].topic }}</a>（{{ moment(pc[1].timestamp).fromNow() }},
+                          <a onclick='if(confirm("Confirm to delete?")==true)window.location.href=
+                "{{ url_for('.del_comment2',id=pc[1].id) }}";' style='text-decoration:none;'>
+                   Delete</a>）</p><br>
+            <p>{{ pc[1].body_html | safe }}</p><br>
+     </div>
+     {% else %}
+      <div class="post-content">
+            {{ pc[0] }}（{{ moment(pc[1].timestamp).fromNow() }},
+                          <a onclick='if(confirm("Confirm to delete?")==true)window.location.href=
+                "{{ url_for('.del_comment2',id=pc[1].id) }}";' style='text-decoration:none;'>
+                   Delete</a>）</p>
+            <p>{{ pc[1].body_html | safe }}</p><br>
+     </div>     
+     {% endif %}
+{% endfor %}
+</div>
+
+
+
+{% else %}
+
+
+<div class="page-header"><h2>发出的评论</h2></div>
+<div class="post-body">
+{% for pc in post_comments %}
+    {% if pc[0] != "原帖子已经删除" %}
+      <div class="post-content">
+            <p>
+          <div class="comment-thumbnail">
+         <a href="{{ url_for('.user', username=pc[0].author.username) }}">
+         {% if pc[0].author.avatar_file != None %}               
+               <img class="img-rounded profile-thumbnail" src="{{ pc[0].author.avatar_file }}" height=25 width=25>
+         {% else %}
+               <img class="img-rounded profile-thumbnail" src="{{ pc[0].author.gravatar(size=25) }}">
+         {% endif %}                                                           
+            </a></p>
+        </div>&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp
+          <a href="{{ url_for('.user', username=pc[0].author.username) }}"> {{pc[0].author.username}}<a/>：
+             <a href="{{ url_for('.post', id=pc[0].id) }}">{{ pc[0].topic }}</a>（{{ moment(pc[1].timestamp).fromNow() }},
+                          <a onclick='if(confirm("确认删除？")==true)window.location.href=
+                "{{ url_for('.del_comment2',id=pc[1].id) }}";' style='text-decoration:none;'>
+                   删除</a>）</p><br>
+            <p>{{ pc[1].body_html | safe }}</p><br>
+     </div>
+     {% else %}
+      <div class="post-content">
+            {{ pc[0] }}（{{ moment(pc[1].timestamp).fromNow() }},
+                          <a onclick='if(confirm("确认删除？")==true)window.location.href=
+                "{{ url_for('.del_comment2',id=pc[1].id) }}";' style='text-decoration:none;'>
+                   删除</a>）</p>
+            <p>{{ pc[1].body_html | safe }}</p><br>
+     </div>     
+     {% endif %}
+{% endfor %}
+</div>
+
+{% endif %}
+
+
+{% if pagination %}
+<div class="pagination">
+    {{ macros.pagination_widget(pagination, '.sent_comments',user_id=current_user.id) }}
+</div>
+{% endif %}
+<br/><br/><br/><br/><br/><br/>
+{% endblock %}
+
+{% block scripts %}
+{{ super() }}
+{{ pagedown.include_pagedown() }}
+
+{% endblock %}

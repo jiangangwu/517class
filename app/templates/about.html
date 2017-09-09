@@ -1,0 +1,213 @@
+{% extends "base.html" %}
+
+{% block title %}{% if english == "yes" %}About 517Class{% else %}关于517上课{% endif %}{% endblock title %}
+
+{% block page_content %}
+
+{% if english == "yes" %}
+
+
+<div class="page-header">
+    
+    <h2><font style="font-weight:bold;font-family:impact;color:#0f88eb"><b><strong>517Class</strong></b></font></h2>
+    </div>
+<div class="col-md-8">
+
+<pre align=center><big> Our mission is to become  <p><q><b>A Free Professional Education Service Platform</b></q></big>.</p></pre>
+
+<p>Currently, the website has functions as below: 
+<ul><li>To write blogs (support markdown)
+</li><li>To write a comment ((support markdown and you can at (@) somebody in a comment)
+</li><li>To upload files, pictures, audio or video               
+</li><li>To register lessons
+</li><li>To upload files, pictures, audios or video for lessons
+</li><li>To open classes
+</li><li>To join classes
+</li><li>To select seats
+</li><li>To submit homeworks
+</li><li>To give comments and scores of homeworks 
+</li><li>To make attendance statistics
+</li><li>To select a replier randomly
+</li><li>To give course discussion or notice
+</li><li>To show various of notifications on homepages of person's, teacher's, lesson's and class'
+</li></ul></p>
+
+
+
+{% else %}
+
+
+
+<div class="page-header">
+    
+    <h2><font style="font-weight:bold;font-family:impact;color:#0f88eb"><b><strong>517上课</strong></b></font></h2>
+    </div>
+<div class="col-md-8">
+
+<pre align=center><big>以发展为 <q><b>免费的专业教育服务平台</b></q> 为己任。</big></pre>
+
+<p>现已开通的功能有：
+<ul><li>博客（支持markdown语法，可以在博客中使用图片、文件、音频或视频）
+</li><li>评论（支持markdown语法，可以在评论中@某人）
+</li><li>开课
+</li><li>课程文件（可以上传图片、文件、音频或视频等课程文件）
+</li><li>开班
+</li><li>选课
+</li><li>选座
+</li><li>考勤
+</li><li>班级通知
+</li><li>提交作业
+</li><li>作业讨论
+</li><li>作业点评和打分
+</li><li>随机提问
+</li><li>课程讨论
+</li><li>提醒（在个人主页、教师主页、课程主页和班级主页显示各类提醒）
+</li></ul></p>
+
+<h3>概述</h3>
+
+<p><small><i><q>创造更有创造力和更美好的人，难道不是教育的目的所在吗？</q></i></small></p>
+                
+<p>该项目意在建立一个教育服务网站，并吸引各学校的老师和学生使用，开设课程、选修课程，自由上传和分享资料，成为线下课程的线上辅助平台。</p>
+
+<p>由于现在的教育服务软件都是各学校定制，这也造成学校内部的资料和教学情况很难被全社会共享和了解。各个学校教学情况基本是一个黑匣子。这不符合教育公开、公平、自由、共享的精神。</p>
+
+<p>现在学校教育软件不仅封闭，质量也参差不齐，网站希望能够发展成专业的、免费的教育平台。通过实现学校教育软件的功能，以替代现有付费教育软件的同时，打通所有学校的围墙，让学校学习、社会学习、自学融为一体，线下教室学习和线上学习水乳交融，使网站成为全民教育的学习辅助平台和资源共享平台，也成为<b>个人终身学习和教师随时授业的好帮手</b>。</p>
+
+<p>网站取名：<tt><b><big>517上课</big></b></tt>，是“我要去上课”的谐音，可以通过“http://517shangke.com”登录。</p>
+ 
+<p>网站已经推出一些基本的功能，比如<b>博客、开课、开班、选课、在线提交作业、在线选座、在线考勤、随机提问等等功能</b>。欢迎<a href="{{ url_for('main.register') }}">&nbsp注册&nbsp</a>使用。</p>
+                                  
+<p>网站主要包括博客、开课和选课三个功能模块，用户身份也分为三种：</p>
+<p>1、博客，注册成功后就可以发表博客；</p>
+<p>2、老师，登记为老师后可以开课；</p>
+<p>3、学生，完善资料后就可以选课。</p>
+
+<p>这三种身份可以同时拥有，即可以既是博主，也是学生，也是老师。以下将对各个身份分别加以介绍。</p>
+
+<h3>博客</h3>
+
+<p><small><i><q>在求知的路上，我们都是好奇的小孩子。让我们学习，让我们写作，让我们发表博客，相互讨论。</q></i></small></p>
+
+<p>博客功能是网站的基础功能。</p>
+
+<p>登记注册后就可以发博客。博客文章可以设为私有或公开。在个人主页里可以看到这些文章。</p>
+            
+<p>可以评论其他人的文章，也可以通过个人主页关注他人。关注和评论可以通过个人主页查看。</p>
+
+<p>博客发帖和评论都支持 <b><a href="{{ url_for('main.markdown') }}">markdown语法</a></b> ，当然您也可以使用html做简单的标记，网站支持大部分html标记。<p>
+
+<img src="{{url_for('static',filename='readme/write_markdown.png')}}" width=256 name="pic1" onclick="if(pic1.width==256)pic1.width=512;else{pic1.width=256;}"/>
+
+            <p><i>(注：本文中图片点击可看大图。)</i></p>
+
+<p>发帖子时，可以上传图片，上传的图片采用1024*1024的大小，所以，上传的图片可以得到比较清晰的显示。为了方便手机阅读，呈现采用256*256的大小，但点击图片看512*512的大图。</p>
+
+<b>单图</b>的帖子，图片位于帖子的最上面，<b>多图</b>的帖子，图片位于帖子最下面。图片支持bmp/jpg/jpeg/png/bmp/jif等多种格式。</p>
+
+<p>网站发帖时点”多图“，不仅可以上传图片，也可以上传文件。比如，希望上传原始图片，就可以采用上传文件方式上传图片。这样的图片会以超链接方式出现在文章后面，点开就可以看到原图。</p>
+
+<p>如果文件太多可以先打包再上传，由于现在租用的空间和网速有限，单个上传文件大小最好不要超过15M。文件上传主要支持txt\pdf\word\excel\ppt\zip\rar或图片。</p>
+
+<p>评论中可以使用提醒（@）的功能，“@用户网名 ”的格式，请不要忘记后面加一个空格。可以@多个人。被@的人会显示在个人主页中。</p>
+
+<p>目前服务器空间和网速有限，不支持音视频上传。要上传音视频的，请先传到百度云盘，再将相关播放链接写到相关班级的发帖中或课程介绍中。</p>
+
+<p>如果遇到“Internal Server Error”，可能是超时退出了，请从首页重新登录后再继续使用。如果持续出现，则是网站有bug，请通过“提出建议”进行报错。万分感谢！</p>
+
+<h3>老师</h3>
+
+<p><small><i><q>教育本质上是自我教育，教育者首先要知道自己想成为什么样的人，可这却是很难的事，这也是教育的难处之一。</q></i></small></p>
+
+<p>注册后，可以到个人帐户下拉菜单<b>“完善个人资料”</b>。<p>
+
+<img src="{{url_for('static',filename='readme/update_profile2.png')}}" width=256 name="pic2" onclick="if(pic2.width==256)pic2.width=512;else{pic2.width=256;}"/>
+
+<p>完善个人资料后，就可以个人帐户下拉菜单<b>“登记为老师”</b>。</p>
+
+<img src="{{url_for('static',filename='readme/regist_teacher.png')}}" width=256 name="pic3" onclick="if(pic3.width==256)pic3.width=512;else{pic3.width=256;}"/>
+
+<p>登记为老师后，个人主页名字边会出现“老师”链接，点进去就可以看到老师的主页，可以选择新的头像，以完善老师主页。在老师主页有开课按钮，点击就可以<b>开课</b>了。<p>
+
+<img src="{{url_for('static',filename='readme/teacher.png')}}" width=256 name="pic4" onclick="if(pic4.width==256)pic4.width=512;else{pic4.width=256;}"/>
+
+<p><b>开课</b>时需要填写课程名称、课程封面、课程简介并上传课程参考资料。然后就会在老师的主页出现该课的链接，点击进去就可以进入课程主页。开课后，课程简介会出现在网站“课程”栏目里。其他人可以点击进入课程主页。</p>
+
+<img src="{{url_for('static',filename='readme/open_lesson.png')}}" width=256  name="pic5" onclick="if(pic5.width==256)pic5.width=512;else{pic5.width=256;}"/>
+
+<p>课程主页有开班的按钮。<b>开班</b>是指针对某课程开的班级。开班需要填写班级的年和季，说明开的班针对什么年级的简要说明。另外，还需要指定教室座位的行数和列数，如果不知道可以先填写一个概数，再最后确定。</p>
+
+<img src="{{url_for('static',filename='readme/open_newlesson.png')}}" width=256  name="pic6" onclick="if(pic6.width==256)pic6.width=512;else{pic6.width=256;}"/>
+
+<p>开班后，课程主页就会出现该班级。学生就可以点击课程主页<b>选修</b>了。</p>
+
+<p>学生选修某课后，学生会出现在老师的班级主页的“名册”里，并出现审核按钮，经过老师<b>批准</b>后，学生就正式加入该课程，学生也就可以选择座位并上传作业等操作了。</p>
+
+<img src="{{url_for('static',filename='readme/lesson.png')}}" width=256  name="pic7" onclick="if(pic7.width==256)pic7.width=512;else{pic7.width=256;}"/>
+
+<p>班级主页有“课程论文”、“座位”、“名册”、“讨论”等功能。课程论文可以上传选题、可行性说明、汇报ppt、论文、参考资料等。座位包含选座、考勤、随机提问等功能。讨论是通过发贴，发表言论。</p>
+
+<img src="{{url_for('static',filename='readme/current_lesson_select_seat.png')}}" width=256  name="pic7_2" onclick="if(pic7_2.width==256)pic7_2.width=512;else{pic7_2.width=256;}"/>
+
+<p>上图为考勤和提问页面。</p>
+
+<p>老师可以在“作业”栏目就学生上传的作业和论文进行“评论”并给出分数。</p>
+
+<h3>学生</h3>
+
+<p><small><i><q>教育让我们在每个单位时间都可能更富有想像力、创造力和美感，简言之，教育让生活更丰富和美好。让我们快乐学习、天天向上吧。</q></i></small></p>
+
+<p>注册并<b>完善个人资料</b>后就可以进行选课了。</p>
+
+<p>选课需要通过网站“课程”栏目找到该课，点击进入就可以通过<b>点击选修按钮选修</b>。也可以通过老师主页找到该老师所开课程点击进入选修。</p>
+
+<p>选课后需要等待老师批准。<b>老师批准后就可以进行选座和上传作业等操作</b>。不过，该班的论坛发言功能并不需要通过批准。</p>
+
+<img src="{{url_for('static',filename='readme/selected_seat.png')}}" width=256  name="pic8" onclick="if(pic8.width==256)pic8.width=512;else{pic8.width=256;}"/>
+
+<p>点击座位提交就可以选择座位。从上图可以看到，其中的“1号0”就是已经选好的座位。其中的“1号“是学生名，”0“表示缺勤次数，老师考勤时也是通过点击该座位提交以更新缺勤数。学生与老师看到的座位是反的，一个是面向讲台，一个是面向学生。学生随时可以换其它空座位，老师通过观察那些有学生坐的位子就可以掌握出勤情况，非常方便考勤、记忆学生名字和抽学生提问。</p>
+
+<p>选好座，上了一些课，学生就需要选择课程论文的题目或提交作业了。学生通过自己课程主页的“更新课程论文”进去就可以修改论文题目或上传作业、课堂汇报ppt或课程论文了。</p>
+
+<img src="{{url_for('static',filename='readme/update_topic2.png')}}" width=256  name="pic9" onclick="if(pic9.width==256)pic9.width=512;else{pic9.width=256;}"/>
+
+<p>学生上传课程论文时会同时将标题和可行性说明作为一个帖子发表在“课程讨论”和个人博客。删除该贴不会影响作业的更新，但建议不要删除该帖子，以方便老师和其他人通过对该帖子的评论功能与您展开讨论。另外，每一次修改课程论文都会同时修改该帖子。</p>
+
+<p>点开相关课程发言的帖子，在帖子下部都会出现课程名称，点击就要以进入到该课程讨论页面。</p>
+
+<h3>其它</h3>
+
+<p><small><i><q>让我们以好奇心和爱心为驱动，共同为中华教育之崛起而努力。</q></i></small></p>
+
+<p>本网站是由 <a href="{{ url_for('main.wujiangang') }}">吴建刚</a> 开发，目前还只是一个个人项目，未来计划发展为用于自由开课、选课和相互交流等的<b>免费的教育服务平台</b>，不仅服务线下教育，也服务于在线教育。</p>
+
+<p>网站采用flask框架开发。希望感兴趣者可以参与讨论，一起在技术和功能上完善网站。网站使用chrome测试，建议使用chrome浏览器。</p>
+                                                         
+<p>未来还想依次开通如下功能：</p>
+<ol>
+<li>站内发信和发帖时的@功能：为用户提供更多互动。</li>
+<li>班级事务的通知功能。</li>
+<li>上传和在线播放语音和视频：为教学提供更多素材。虽然技术上比较容易实现，但目前购买的空间和网速实在是没办法支持语音和视频直接上传。不过，您可以将语音和视频上传到百度云盘，然后把播放的地址写到课程简介中，或者在相应的班级主页上发帖中包括相关链接。</li>
+<li>白板功能：一个班在线的同学和老师可以同时操作一个白板。可以用于现场教学代替白板，或者作为远程教学的白板。</li>
+<li>语音及视频聊天室：可以配合白板使用，同时也可以实现在线教学时的老师和同学的互动。视频按座位排列，显示座位上的每个人的微视频，点开就可以看大视频。</li>
+<li>上传试题，试题批改，在线考试，在线答疑。</li>
+<li>试题库功能：会购买或整理一些课程的试题存放在数据库中，供老师使用，以辅助老师出题。</li>
+<li>付费和打赏功能：为需要付费和打赏的课程或活动提供支付通道。</li>
+<li>更多支持中小学的功能。目前的功能主要是辅助大学课堂的，未来还会扩展到为中小学课堂提供更多适用的功能。</li>
+<li>积分功能：为用户和老师提供更多激励。</li>
+<li>广告功能：为与课程相关的产品、公司和招聘广告，放在网站最底提供静态小方块的展位。由于这样的广告与课程相关，所以对教学是有利的，而且放在最底部，要向下拉到底才看得到，所以不影响美观，也应该不会引起反感。</li>
+<li>开发安卓和苹果版本的移动应用。网站虽然是自适应的，可以比较好的在手机和平板上呈现和操作，并且对于苹果手机点“添加到屏幕”还可以产生一个方便使用的图标，但体验没有本地的应用好，所以还需要提供相关的本地应用。</li>
+</ol>
+
+<p>由于时间和能力有限，网站还有很多瑕疵，目前只是小范围测试。网站的完善离不开热心教育事业的您的帮助，还请多 <a href="{{ url_for('main.suggestion') }}">提宝贵建议</a> 。</p>
+                                                         
+<br>
+<p>最后，如果您觉得可以尝试使用，那么现在就 <a href="{{ url_for('main.register') }}"><big>注册</big></a> 吧。</p>
+                            
+<br><br><br><br><br><br><br><br><br>
+</div>
+
+
+
+{% endif %}
+{% endblock %}

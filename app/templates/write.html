@@ -1,0 +1,25 @@
+{% extends "base.html" %}
+{% import "bootstrap/wtf.html" as wtf %}
+{% import "_macros.html" as macros %}
+
+{% block title %}{% if english == "yes" %}Write{% else %}发贴{% endif %}{% endblock title %}
+
+{% block page_content %}
+
+<div align=right class="post_footer"><a href="{{ url_for('main.write2',tag=tag) }}">{% if english == "yes" %}Mult-media{% else %}多媒体{% endif %}</a> </div>
+{% if current_user.is_authenticated and current_user.can(Permission.WRITE_ARTICLES) %}
+
+{{ wtf.quick_form(form) }}
+
+{% endif %}
+<br/><br/><br/>
+
+
+
+
+{% endblock %}
+
+{% block scripts %}
+{{ super() }}
+{{ pagedown.include_pagedown() }}
+{% endblock %}

@@ -1,0 +1,14 @@
+尊敬的{{ user.username }}：
+
+您好！
+
+确定使用此账户注册，请点击以下链接：
+
+{{ url_for('main.confirm', token=token, _external=True) }}
+
+祝安！
+
+--
+517上课
+
+注：请不必回复此邮件。

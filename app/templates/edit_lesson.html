@@ -1,0 +1,65 @@
+{% extends "base.html" %}
+{% import "bootstrap/wtf.html" as wtf %}
+{% import "_macros.html" as macros %}
+
+{% block title %}{% if english == "yes" %}Modify profile of the lesson{% else %}修改课程资料{% endif %}{% endblock title %}
+
+{% block page_content %}
+
+{% if english == "yes" %}
+
+
+
+
+
+{% if current_user.id == lesson.teacher_id %}
+<div align=right class="post_footer"><a onclick='if(confirm("Confirm to delete? ")==true)window.location.href=
+    "{{ url_for('.del_lesson',id=id) }}";' style='text-decoration:none;'>
+       <span class="label label-default">Delete</span></a>
+</div>   
+
+{% if current_user.is_authenticated and current_user.can(Permission.WRITE_ARTICLES) %}
+    {{ wtf.quick_form(form) }}
+{% endif %}
+<br><br><br><br>
+{% else %}
+You have no right to edit.
+{% endif %}
+
+
+
+
+
+{% else %}
+
+
+
+
+{% if current_user.id == lesson.teacher_id %}
+<div align=right class="post_footer"><a onclick='if(confirm("确认删除？")==true)window.location.href=
+    "{{ url_for('.del_lesson',id=id) }}";' style='text-decoration:none;'>
+       <span class="label label-default">删除</span></a>
+</div>   
+
+{% if current_user.is_authenticated and current_user.can(Permission.WRITE_ARTICLES) %}
+    {{ wtf.quick_form(form) }}
+{% endif %}
+<br><br><br><br>
+{% else %}
+您无权编辑！
+{% endif %}
+
+
+
+
+
+{% endif %}
+
+
+
+{% endblock %}
+
+{% block scripts %}
+{{ super() }}
+{{ pagedown.include_pagedown() }}
+{% endblock %}

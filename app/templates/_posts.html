@@ -1,0 +1,244 @@
+{% if english == "yes" %}
+
+
+
+<ul class="posts">
+    {% for post in posts %}
+    <li class="post">
+        <div class="post-thumbnail">
+            <a href="{{ url_for('.user', username=post.author.username) }}">
+         {% if post.author.avatar_file != None  %}               
+               <img class="img-rounded profile-thumbnail" src="{{ post.author.avatar_file }}" height=40 width=40>
+         {% else %}
+               <img class="img-rounded profile-thumbnail" src="{{ post.author.gravatar(size=40) }}">
+         {% endif %}                                                           
+            </a>
+        </div>
+        <div class="post-content">
+            <div class="post-date"><small>{{ moment(post.timestamp).fromNow() }}</small></div>
+            <div class="post-author"><a href="{{ url_for('.user', username=post.author.username) }}">{{ post.author.username }}</a></div>
+            <div class="post-body">
+            
+                {% if post.topic %}
+                    <h2><a href="{{ url_for('.post', id=post.id) }}">{{ post.topic }}</a></h2>
+                {% endif %}
+
+                {% if post.pic and post.pic1 == None %}             
+                <p><img width="256" name="{{'pic'+post.id | string }}" onclick="if({{'pic'+post.id | string }}.width==256){{'pic'+post.id | string }}.width=512;else{ {{'pic'+post.id | string }}.width=256;}" src="{{ post.pic }}" ></p>                            
+                {% endif %}                                                           
+
+              
+                {% if post.body_html | length > 500 %}
+                    {{ post.body_html[0:500] | safe }}
+                 "……<br/><br/>
+                    <a href="{{ url_for('.post', id=post.id) }}">show only 500 characters, to show full article please click here...</a>
+                    {% else %}
+                    {{ post.body_html | safe }}
+                {% endif %}                
+                
+                {% if post.pic and post.pic1 != None %}             
+                <p><img width="256" name="{{'pic'+post.id | string }}" onclick="if({{'pic'+post.id | string }}.width==256){{'pic'+post.id | string }}.width=512;else{ {{'pic'+post.id | string }}.width=256;}" src="{{ post.pic }}" ></p>                            
+                {% endif %}                                                           
+               {% if post.pic1  != None %}             
+                <p><img width="256" name="{{'pic1'+post.id | string }}" onclick="if({{'pic1'+post.id | string }}.width==256){{'pic1'+post.id | string }}.width=512;else{ {{'pic1'+post.id | string }}.width=256;}" src="{{ post.pic1 }}"></p>                            
+                {% endif %}                                                           
+                {% if post.pic2 != None  %}             
+                <p><img width="256" name="{{'pic2'+post.id | string }}" onclick="if({{'pic2'+post.id | string }}.width==256){{'pic2'+post.id | string }}.width=512;else{ {{'pic2'+post.id | string }}.width=256;}" src="{{ post.pic2 }}"></p>                            
+                {% endif %}                                                           
+                {% if post.pic3  != None %}             
+                <p><img width="256" name="{{'pic3'+post.id | string }}" onclick="if({{'pic3'+post.id | string }}.width==256){{'pic3'+post.id | string }}.width=512;else{ {{'pic3'+post.id | string }}.width=256;}" src="{{ post.pic3 }}"></p>                            
+                {% endif %}                                                           
+
+                {% if post.file3 != None and post.tag == "posts" %}
+                    <p>  <br><a  href="{{ url_for('static',filename=post.file3.replace('/static/','')) }}" >{{ post.filename3 }}</a><br><br>
+                             <audio controls="controls">
+                                   <source src="{{ url_for('static',filename=post.file3.replace('/static/','')) }}" />
+                                                  Your browser does not support the audio tag.
+                             </audio>
+                    </p>  
+                {% endif %}  
+                {% if post.file4 != None and post.tag == "posts" %}             
+                <p>  <br><a  href="{{ url_for('static',filename=post.file4.replace('/static/','')) }}" >{{ post.filename4 }}</a><br><br>
+                         <video width="256" controls="controls">
+                               <source type='video/webm; codecs="vp8.0, vorbis"' src="{{ url_for('static',filename=post.file4.replace('/static/','')) }}"/>
+                               <source type='video/ogg; codecs="theora, vorbis"'  src="{{ url_for('static',filename=post.file4.replace('/static/','')) }}"/>
+                               <source type='video/mp4; codecs="avc1.4D401E, mp4a.40.2"' src="{{ url_for('static',filename=post.file4.replace('/static/','')) }}"/>
+                                              Your browser does not support the video tag.
+                         </video>
+                </p>                            
+                {% endif %}                                                             
+                {% if post.file1 != None %}             
+                <p><a  href="{{ url_for('static',filename=post.file1.replace('/static/','')) }}" >{{ post.filename1 }}</a></p>                            
+                {% endif %}                                                           
+                {% if post.file2 != None  %}             
+                <p><a  href="{{ url_for('static',filename=post.file2.replace('/static/','')) }}" >{{ post.filename2 }}</a></p>                            
+                {% endif %}                                                           
+                {% if post.file3 != None and post.tag != "posts" %}             
+                <p><a  href="{{ url_for('static',filename=post.file3.replace('/static/','')) }}" >{{ post.filename3 }}</a></p>                            
+                {% endif %}                                                           
+                {% if post.file4 != None and post.tag != "posts" %}             
+                <p><a  href="{{ url_for('static',filename=post.file4.replace('/static/','')) }}" >{{ post.filename4 }}</a></p>                            
+                {% endif %}                                                           
+                {% if post.file5 != None  %}             
+                <p><a  href="{{ url_for('static',filename=post.file5.replace('/static/','')) }}" >{{ post.filename5 }}</a></p>                            
+                {% endif %}                                                           
+   
+            </div>
+            <div class="post-footer">
+                {% if current_user == post.author and post.private==True %}
+                    <span style="background-color:#FFFFFF;color:#777777" class="label label-default">Private</span>
+                {% endif %}
+
+                {% if current_user == post.author %}
+                    {% if current_user == post.author and (post.pic1 != None or post.pic2 != None or post.pic3 != None or post.file1 != None or post.file2 != None or post.file3 != None or post.file4 != None or post.file5 != None) %}
+                    <a href="{{ url_for('.edit2', id=post.id) }}">
+                        <span class="label label-primary">Edit</span>
+                    </a>
+                    {% else %}
+                    <a href="{{ url_for('.edit', id=post.id) }}">
+                        <span class="label label-primary">Edit</span>
+                    </a>
+                    {% endif %}       
+                {% endif %}       
+
+                {% if current_user.is_administrator() %}
+                <a href="{{ url_for('.edit', id=post.id) }}">
+                    <span class="label label-danger">Edit [Admin]</span>
+                </a>
+                {% endif %}   
+                <a href="{{ url_for('.post', id=post.id) }}">
+                    <span class="label label-default">Link</span>
+                </a>
+         
+                <a href="{{ url_for('.post', id=post.id) }}#comments">
+                    <span class="label label-primary">{{ post.comments.count() }} {% if post.comments.count()>1 %} Comments {% else %} Comment {% endif %}</span>
+                </a>
+            </div>
+        </div>
+    </li>
+    {% endfor %}
+</ul>
+
+
+
+{% else %}
+
+<ul class="posts">
+    {% for post in posts %}
+    <li class="post">
+        <div class="post-thumbnail">
+            <a href="{{ url_for('.user', username=post.author.username) }}">
+         {% if post.author.avatar_file != None  %}               
+               <img class="img-rounded profile-thumbnail" src="{{ post.author.avatar_file }}" height=40 width=40>
+         {% else %}
+               <img class="img-rounded profile-thumbnail" src="{{ post.author.gravatar(size=40) }}">
+         {% endif %}                                                           
+            </a>
+        </div>
+        <div class="post-content">
+            <div class="post-date"><small>{{ moment(post.timestamp).fromNow() }}</small></div>
+            <div class="post-author"><a href="{{ url_for('.user', username=post.author.username) }}">{{ post.author.username }}</a></div>
+            <div class="post-body">
+            
+                {% if post.topic %}
+                    <h2><a href="{{ url_for('.post', id=post.id) }}">{{ post.topic }}</a></h2>
+                {% endif %}
+
+                {% if post.pic and post.pic1 == None %}             
+                <p><img width="256" name="{{'pic'+post.id | string }}" onclick="if({{'pic'+post.id | string }}.width==256){{'pic'+post.id | string }}.width=512;else{ {{'pic'+post.id | string }}.width=256;}" src="{{ post.pic }}" ></p>                            
+                {% endif %}                                                           
+
+              
+                {% if post.body_html | length > 500 %}
+                    {{ post.body_html[0:500] | safe }}
+                 "……<br/><br/>
+                    <a href="{{ url_for('.post', id=post.id) }}">仅显示500字，查看全文，请点此处……</a>
+                    {% else %}
+                    {{ post.body_html | safe }}
+                {% endif %}                
+                
+                {% if post.pic and post.pic1 != None %}             
+                <p><img width="256" name="{{'pic'+post.id | string }}" onclick="if({{'pic'+post.id | string }}.width==256){{'pic'+post.id | string }}.width=512;else{ {{'pic'+post.id | string }}.width=256;}" src="{{ post.pic }}" ></p>                            
+                {% endif %}                                                           
+               {% if post.pic1  != None %}             
+                <p><img width="256" name="{{'pic1'+post.id | string }}" onclick="if({{'pic1'+post.id | string }}.width==256){{'pic1'+post.id | string }}.width=512;else{ {{'pic1'+post.id | string }}.width=256;}" src="{{ post.pic1 }}"></p>                            
+                {% endif %}                                                           
+                {% if post.pic2 != None  %}             
+                <p><img width="256" name="{{'pic2'+post.id | string }}" onclick="if({{'pic2'+post.id | string }}.width==256){{'pic2'+post.id | string }}.width=512;else{ {{'pic2'+post.id | string }}.width=256;}" src="{{ post.pic2 }}"></p>                            
+                {% endif %}                                                           
+                {% if post.pic3  != None %}             
+                <p><img width="256" name="{{'pic3'+post.id | string }}" onclick="if({{'pic3'+post.id | string }}.width==256){{'pic3'+post.id | string }}.width=512;else{ {{'pic3'+post.id | string }}.width=256;}" src="{{ post.pic3 }}"></p>                            
+                {% endif %}                                                           
+
+                {% if post.file3 != None and post.tag == "posts" %}             
+                <p>  <br><a  href="{{ url_for('static',filename=post.file3.replace('/static/','')) }}" >{{ post.filename3 }}</a><br><br>
+                         <audio controls="controls">
+                               <source src="{{ url_for('static',filename=post.file3.replace('/static/','')) }}" />
+                                              你的浏览器不支持音频。
+                         </audio>
+                </p>                            
+                {% endif %}  
+                {% if post.file4 != None and post.tag == "posts" %}             
+                <p>  <br><a href="{{ url_for('static',filename=post.file4.replace('/static/','')) }}" >{{ post.filename4 }}</a><br><br>
+                         <video width="256" controls="controls">
+                               <source type='video/webm; codecs="vp8.0, vorbis"' src="{{ url_for('static',filename=post.file4.replace('/static/','')) }}"/>
+                               <source type='video/ogg; codecs="theora, vorbis"'  src="{{ url_for('static',filename=post.file4.replace('/static/','')) }}"/>
+                               <source type='video/mp4; codecs="avc1.4D401E, mp4a.40.2"' src="{{ url_for('static',filename=post.file4.replace('/static/','')) }}"/>
+                                              你的浏览器不支持视频。
+                         </video>
+                </p>                            
+                {% endif %}                                                             
+                {% if post.file1 != None %}             
+                <p><a  href="{{ url_for('static',filename=post.file1.replace('/static/','')) }}" >{{ post.filename1 }}</p>                            
+                {% endif %}                                                           
+                {% if post.file2 != None  %}             
+                <p><a  href="{{ url_for('static',filename=post.file2.replace('/static/','')) }}" >{{ post.filename2 }}</p>                            
+                {% endif %}                                                           
+                {% if post.file3 != None and post.tag != "posts" %}             
+                <p><a  href="{{ url_for('static',filename=post.file3.replace('/static/','')) }}" >{{ post.filename3 }}</a></p>                            
+                {% endif %}                                                           
+                {% if post.file4 != None and post.tag != "posts" %}             
+                <p><a  href="{{ url_for('static',filename=post.file4.replace('/static/','')) }}" >{{ post.filename4 }}</a></p>                            
+                {% endif %}                                                           
+                {% if post.file5 != None  %}             
+                <p><a  href="{{ url_for('static',filename=post.file5.replace('/static/','')) }}" >{{ post.filename5 }}</p>                            
+                {% endif %}                                                           
+   
+            </div>
+            <div class="post-footer">
+                {% if current_user == post.author and post.private==True %}
+                    <span style="background-color:#FFFFFF;color:#777777" class="label label-default">私有</span>
+                {% endif %}
+
+                {% if current_user == post.author %}
+                    {% if current_user == post.author and (post.pic1 != None or post.pic2 != None or post.pic3 != None or post.file1 != None or post.file2 != None or post.file3 != None or post.file4 != None or post.file5 != None) %}
+                    <a href="{{ url_for('.edit2', id=post.id) }}">
+                        <span class="label label-primary">编辑</span>
+                    </a>
+                    {% else %}
+                    <a href="{{ url_for('.edit', id=post.id) }}">
+                        <span class="label label-primary">编辑</span>
+                    </a>
+                    {% endif %}       
+                {% endif %}       
+
+                {% if current_user.is_administrator() %}
+                <a href="{{ url_for('.edit', id=post.id) }}">
+                    <span class="label label-danger">编辑 [Admin]</span>
+                </a>
+                {% endif %}   
+                <a href="{{ url_for('.post', id=post.id) }}">
+                    <span class="label label-default">链接</span>
+                </a>
+         
+                <a href="{{ url_for('.post', id=post.id) }}#comments">
+                    <span class="label label-primary">{{ post.comments.count() }} 评论</span>
+                </a>
+            </div>
+        </div>
+    </li>
+    {% endfor %}
+</ul>
+
+
+{% endif %}

@@ -1,0 +1,56 @@
+{% extends "base.html" %}
+{% import "bootstrap/wtf.html" as wtf %}
+{% import "_macros.html" as macros %}
+
+{% block title %}{{post.topic}}{% endblock %}
+
+{% block page_content %}
+
+   
+
+{% endif %}
+{% include '_letters.html' %}
+{% if pagination %}
+{% endif %}
+
+
+
+
+{% if english == "yes" %}
+
+
+    <h4 id="comments">letter</h4>
+    {% if current_user.can(Permission.COMMENT) %}
+    <div class="comment-form-flask">
+        {{ wtf.quick_form(form) }}
+    </div>
+    <div class="pagination">
+        {{ macros.pagination_widget(pagination, '.post', fragment='#comments', id=post.id) }}
+    </div>
+    
+
+ 
+
+{% else %}
+
+ 
+    
+
+    <h4 id="comments">评论</h4>
+    {% if current_user.can(Permission.COMMENT) %}
+    <div class="comment-form-flask">
+        {{ wtf.quick_form(form) }}
+    </div>
+    <div class="pagination">
+        {{ macros.pagination_widget(pagination, '.post', fragment='#comments', id=post.id) }}
+    </div>
+
+{% endif %}
+
+{% endblock %}
+
+
+{% block scripts %}
+{{ super() }}
+{{ pagedown.include_pagedown() }}
+{% endblock %}

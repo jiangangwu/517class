@@ -1,0 +1,207 @@
+{% extends "base.html" %}
+{% import "bootstrap/wtf.html" as wtf %}
+{% import "_macros.html" as macros %}
+
+{% block title %}{% if english == "yes" %}Open a new class{% else %}开班{% endif %}{% endblock title %}
+
+{% block page_content %}
+
+{% if english == "yes" %}
+
+
+
+
+
+
+{% if lesson.teacher_id == current_user.id %}
+
+<p><h2><b>&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp
+&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp讲&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp台</b></h2></p>
+
+<form>
+<table cellspacing="6px">
+{% if current_user.is_authenticated and current_user.can(Permission.WRITE_ARTICLES) %}
+{%- for i in range(newlesson.room_row) %}
+ {% if i+1 <= 9  %}
+    <tr><td>Row: 0{{i+1}}</td>
+ {% else %}
+    <tr><td>Row: {{i+1}}</td>
+{% endif %}
+         
+   {% for j in range(newlesson.room_column) %}        
+    <td> 
+       <input type="button" style="font-size:18px;background-color:white;border:1px solid gray;"  
+       id="{% if i+1 <= 9  %}0{{ i+1 }}{% else %}{{ i+1 }}{% endif %}{% if j+1 <= 9 %}0{{ j+1 }}{% else %}{{ j+1 }}{% endif %}"
+       onclick="setSeat('{% if i+1 <= 9  %}0{{ i+1 }}{% else %}{{ i+1 }}{% endif %}{% if j+1 <= 9 %}0{{ j+1 }}{% else %}{{ j+1 }}{% endif %}')" 
+       value="{% if i+1 <= 9  %}0{{ i+1 }}{% else %}{{ i+1 }}{% endif %}{% if j+1 <= 9 %}0{{ j+1 }}{% else %}{{ j+1 }}{% endif %}"/>
+    </td>
+
+    {% endfor -%}
+
+</tr>
+{% endfor %}
+</table>
+{% endif %}
+<br/>
+
+<font color=black>Absenct seat: </font>
+<input type="button" style="font-size:15px;" size=10 id="seat1" name="identifier" value=""/>
+<input type="hidden" style="font-size:15px;" size=10 id="seat1" name="identifier" value=""/>
+<br><br>
+<input style="font-size:18px;" size=18 onclick="if (confirm('Confirm to submit?')===false)return false；" 
+  style="font-size=20;" size=12 type="submit" value="Submit">
+</form>
+
+{% else %}
+
+<form>
+<table cellspacing="6px">
+{% if current_user.is_authenticated and current_user.can(Permission.WRITE_ARTICLES) %}
+{%- for i in range(newlesson.room_row,0) %}
+ {% if i+1 <= 9  %}
+    <tr><td>Row: 0{{i+1}}</td>
+ {% else %}
+    <tr><td>Row: {{i+1}}</td>
+{% endif %}
+         
+   {% for j in range(newlesson.room_column,0) %}        
+    <td> 
+       <input type="button" style="font-size:18px;background-color:white;border:1px solid gray;"  
+       id="{% if i+1 <= 9  %}0{{ i+1 }}{% else %}{{ i+1 }}{% endif %}{% if j+1 <= 9 %}0{{ j+1 }}{% else %}{{ j+1 }}{% endif %}"
+       onclick="setSeat('{% if i+1 <= 9  %}0{{ i+1 }}{% else %}{{ i+1 }}{% endif %}{% if j+1 <= 9 %}0{{ j+1 }}{% else %}{{ j+1 }}{% endif %}')" 
+       value="{% if i+1 <= 9  %}0{{ i+1 }}{% else %}{{ i+1 }}{% endif %}{% if j+1 <= 9 %}0{{ j+1 }}{% else %}{{ j+1 }}{% endif %}"/>
+    </td>
+
+    {% endfor -%}
+
+</tr>
+{% endfor %}
+</table>
+{% endif %}
+<br/>
+
+<font color=black>Absent seat: </font>
+<input type="button" style="font-size:15px;" size=10 id="seat1" name="identifier" value=""/>
+<input type="hidden" style="font-size:15px;" size=10 id="seat1" name="identifier" value=""/>
+<br><br>
+<input style="font-size:18px;" size=18 onclick="if (confirm('Confirm to submit?')===false)return false；" 
+  style="font-size=20;" size=12 type="submit" value="Submit">
+</form>
+<p><h2><b>&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp
+&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp讲&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp台</b></h2></p>
+{% endif %}
+
+
+
+
+
+
+
+
+
+
+{% else %}
+
+
+
+
+
+{% if lesson.teacher_id == current_user.id %}
+
+<p><h2><b>&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp
+&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp讲&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp台</b></h2></p>
+
+<form>
+<table cellspacing="6px">
+{% if current_user.is_authenticated and current_user.can(Permission.WRITE_ARTICLES) %}
+{%- for i in range(newlesson.room_row) %}
+ {% if i+1 <= 9  %}
+    <tr><td>第0{{i+1}}排：</td>
+ {% else %}
+    <tr><td>第{{i+1}}排：</td>
+{% endif %}
+         
+   {% for j in range(newlesson.room_column) %}        
+    <td> 
+       <input type="button" style="font-size:18px;background-color:white;border:1px solid gray;"  
+       id="{% if i+1 <= 9  %}0{{ i+1 }}{% else %}{{ i+1 }}{% endif %}{% if j+1 <= 9 %}0{{ j+1 }}{% else %}{{ j+1 }}{% endif %}"
+       onclick="setSeat('{% if i+1 <= 9  %}0{{ i+1 }}{% else %}{{ i+1 }}{% endif %}{% if j+1 <= 9 %}0{{ j+1 }}{% else %}{{ j+1 }}{% endif %}')" 
+       value="{% if i+1 <= 9  %}0{{ i+1 }}{% else %}{{ i+1 }}{% endif %}{% if j+1 <= 9 %}0{{ j+1 }}{% else %}{{ j+1 }}{% endif %}"/>
+    </td>
+
+    {% endfor -%}
+
+</tr>
+{% endfor %}
+</table>
+{% endif %}
+<br/>
+
+<font color=black>缺席座位为：</font>
+<input type="button" style="font-size:15px;" size=10 id="seat1" name="identifier" value=""/>
+<input type="hidden" style="font-size:15px;" size=10 id="seat1" name="identifier" value=""/>
+<br><br>
+<input style="font-size:18px;" size=18 onclick="if (confirm('确认选择？')===false)return false；" 
+  style="font-size=20;" size=12 type="submit" value="提交">
+</form>
+
+{% else %}
+
+<form>
+<table cellspacing="6px">
+{% if current_user.is_authenticated and current_user.can(Permission.WRITE_ARTICLES) %}
+{%- for i in range(newlesson.room_row,0) %}
+ {% if i+1 <= 9  %}
+    <tr><td>第0{{i+1}}排：</td>
+ {% else %}
+    <tr><td>第{{i+1}}排：</td>
+{% endif %}
+         
+   {% for j in range(newlesson.room_column,0) %}        
+    <td> 
+       <input type="button" style="font-size:18px;background-color:white;border:1px solid gray;"  
+       id="{% if i+1 <= 9  %}0{{ i+1 }}{% else %}{{ i+1 }}{% endif %}{% if j+1 <= 9 %}0{{ j+1 }}{% else %}{{ j+1 }}{% endif %}"
+       onclick="setSeat('{% if i+1 <= 9  %}0{{ i+1 }}{% else %}{{ i+1 }}{% endif %}{% if j+1 <= 9 %}0{{ j+1 }}{% else %}{{ j+1 }}{% endif %}')" 
+       value="{% if i+1 <= 9  %}0{{ i+1 }}{% else %}{{ i+1 }}{% endif %}{% if j+1 <= 9 %}0{{ j+1 }}{% else %}{{ j+1 }}{% endif %}"/>
+    </td>
+
+    {% endfor -%}
+
+</tr>
+{% endfor %}
+</table>
+{% endif %}
+<br/>
+
+<font color=black>缺席座位为：</font>
+<input type="button" style="font-size:15px;" size=10 id="seat1" name="identifier" value=""/>
+<input type="hidden" style="font-size:15px;" size=10 id="seat1" name="identifier" value=""/>
+<br><br>
+<input style="font-size:18px;" size=18 onclick="if (confirm('确认选择？')===false)return false；" 
+  style="font-size=20;" size=12 type="submit" value="提交">
+</form>
+<p><h2><b>&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp
+&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp讲&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp台</b></h2></p>
+{% endif %}
+
+
+
+
+
+
+
+{% endif %}
+
+
+<script type='text/javascript'>
+      function setSeat(myseat){
+            v=document.getElementById(myseat).value;
+            document.getElementById('seat1').value=v;
+      }
+</script>
+{% endblock %}
+
+{% block scripts %}
+{{ super() }}
+{{ pagedown.include_pagedown() }}
+{% endblock %}

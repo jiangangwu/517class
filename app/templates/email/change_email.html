@@ -1,0 +1,8 @@
+<p>尊敬的 {{ user.username }}：</p>
+<p>要确认邮箱 <a href="{{ url_for('main.change_email', token=token, _external=True) }}">请点击这里</a></p>
+<p>或者，您可以复制以下链接到浏览器地址栏打开链接：</p>
+<p>{{ url_for('main.change_email', token=token, _external=True) }}</p>
+<p>祝好！</p>
+<p>--</p>
+<p>517上课</p>
+<p><small>注：此邮件无需回复。</small></p>

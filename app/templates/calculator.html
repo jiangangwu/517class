@@ -1,0 +1,12 @@
+{% extends "base.html" %}
+
+{% block title %}{% if english == "yes" %}Calculator{% else %}计算器{% endif %}{% endblock title%}
+
+{% block page_content %}
+<a align=left href="{{url_for('main.calculator_science')}}">另一个计算器皮肤</a><br/>
+<div align=center>
+<iframe id="aa" allowTransparency="true" src="http://www.zou114.com/jsq/jsq.htm" width="587" height="656" frameborder="0" scrolling="no" border="0" name="a" style="text-align:center;">
+</iframe>
+</div>
+
+{% endblock %}

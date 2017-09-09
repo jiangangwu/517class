@@ -1,0 +1,48 @@
+{% extends "base.html" %}
+{% import "bootstrap/wtf.html" as wtf %}
+{% import "_macros.html" as macros %}
+
+{% block title %}{% if english == "yes" %}Modify the teacher's profile{% else %}修改老师资料{% endif %}{% endblock %}
+
+{% block page_content %}
+{% if english == "yes" %}
+
+<div align=right class="post_footer">
+    <a onclick='if(confirm("Are you sure to delete your profile of teacher?")==true)window.location.href=
+    "{{ url_for('.del_teacher',id=teacher.id) }}";' style='text-decoration:none;'>
+       <span class="label label-default">Delete</span></a> 
+</div>
+
+<div class="page-header">
+    <h2>Modify the teacher's profile</h2>
+</div>
+<div class="col-md-full">
+    {{ wtf.quick_form(form) }}
+</div>
+
+{% else %}
+
+
+<div align=right class="post_footer">
+    <a onclick='if(confirm("确认删除老师身份？")==true)window.location.href=
+    "{{ url_for('.del_teacher',id=teacher.id) }}";' style='text-decoration:none;'>
+       <span class="label label-default">删除</span></a> 
+</div>
+
+<div class="page-header">
+    <h2>修改老师资料</h2>
+</div>
+<div class="col-md-full">
+    {{ wtf.quick_form(form) }}
+</div>
+
+
+
+{% endif %}
+
+{% endblock %}
+
+{% block scripts %}
+{{ super() }}
+{{ pagedown.include_pagedown() }}
+{% endblock %}

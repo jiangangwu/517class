@@ -1,0 +1,238 @@
+{% extends "base.html" %}
+{% import "_macros.html" as macros %}
+
+{% block title %}{{ user.username }}{% endblock %}
+
+{% block page_content %}
+
+{% if english == "yes" %}
+
+    <div class="page-header">
+        <a href="{{ url_for('main.change_pic') }}" title="Change portrate">
+             {% if teacher.pic != None %}               
+                   <img class="img-rounded profile-thumbnail" src="{{ teacher.pic }}" width=200>
+             {% else %}
+                   <img class="img-rounded profile-thumbnail" src="{{ user.gravatar(size=200) }}">
+             {% endif %}                                                           
+        </a>
+    
+        <div class="profile-header">
+    
+            <h2><a href="{{ url_for('.user', username=user.username) }}">{{ user.name }}</a></h2>
+            {% if user.name or user.location or user.tel %}
+            <p>School: {{ teacher.school }}
+             <p>Research areas: {{ teacher.field }}</p>
+            {% endif %}
+           
+           {% if current_user.can(Permission.FOLLOW) and user != current_user and current_user.is_following(user) %}
+               <a style="text-decoration:none" href="mailto: {{ user.email }}">  {{ user.email }}  </a>
+           {% endif %}
+            </p>
+            {% if current_user.is_administrator() %}
+            <p><a href="mailto:{{ user.email }}">{{ user.email }}</a></p>
+            {% endif %}
+            <p>Registered: {{ moment(user.member_since).fromNow() }}</p>
+                     <p>Last login: {{ moment(user.last_seen).fromNow() }}</p></small>
+            <p>
+                <a href="{{ url_for('.show_opened_lesson',id=teacher.id) }}"><small>Lesson</small><span class="badge">{{ teacher.count_lesson() }}</span></a>       
+                &nbsp&nbsp<a href="{{ url_for('.show_opened_lesson_file',id=teacher.id) }}"><small>File</small><span class="badge">{{ teacher.count_file() }}</span></a>
+                <br><a href="{{ url_for('.show_opened_lesson_discussion',id=teacher.id) }}"><small>Discussion</small><span class="badge">{{ teacher.count_discussion() }}</span></a>
+                &nbsp&nbsp<a href="{{ url_for('.show_opened_lesson_student',id=teacher.id) }}"><small>Student</small><span class="badge">{{ teacher.count_student() }}</span></a>
+            </p>
+                                      
+           <p></p>       
+                {% if teacher.teacher_id == current_user.id %}
+                       <p><a href="{{url_for('main.edit_teacher',id=current_user.id)}}">Modify teacher's profile</a></p>
+           {% endif %}
+           {% if teacher.teacher_id == current_user.id %}
+                <p><a class="btn btn-default" href="{{url_for('main.open_lesson')}}">Open a new lesson</a></p>
+            {% endif %}
+        </div>       
+    </div>
+    <div class="post-tabs">
+        <ul class="nav nav-tabs">
+            <li {% if show_opened_lesson != "1" and show_opened_lesson != "2"   and show_opened_lesson != "3"   and show_opened_lesson != "4"  %} class="active"{% endif %}><a href="{{ url_for('.show_about_teacher',id=teacher.id) }}">About</a></li>
+            <li {% if show_opened_lesson == "1" %} class="active"{% endif %}><a href="{{ url_for('.show_opened_lesson',id=teacher.id) }}">Lesson</a></li>
+            <li {% if show_opened_lesson == "2" %} class="active"{% endif %}><a href="{{ url_for('.show_opened_lesson_file',id=teacher.id) }}">File</a></li>
+            <li {% if show_opened_lesson == "3" %} class="active"{% endif %}><a href="{{ url_for('.show_opened_lesson_discussion',id=teacher.id) }}">Discussion</a></li>
+            <li {% if show_opened_lesson == "4" %} class="active"{% endif %}><a href="{{ url_for('.show_opened_lesson_student',id=teacher.id) }}">Student</a></li>
+        </ul>
+    </div>  
+    <div class="post-body">
+        {% if show_opened_lesson != "1"  and show_opened_lesson != "2"   and show_opened_lesson != "3"   and show_opened_lesson != "4"  %}
+            <br>
+            {% if teacher.about_teacher %}<p>{{ teacher.about_teacher_html | safe }}</p>{% endif %}
+        {% endif %}
+        {% if show_opened_lesson == "1" %}
+            <br>
+            <br><table cellspacing='0'  border='1' bordercolor='#D0D0D0' cellpadding='4' align='left'>
+            <th>Name</th><th>About</th><th>Date of being Created</th>
+            {% for lesson in lessons %}
+            <tr><td><a href="{{ url_for('main.lesson',id=lesson.id) }}">{{ lesson.lesson_name }}</a></td>
+                <td>{{lesson.about_lesson_html[0:100] | safe}}......</td>
+                <td>{{moment(lesson.timestamp).format("YY/MM/DD")}}
+            </tr>
+            {% endfor %}
+            </table>
+            <br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br>
+        {% endif %}
+        {% if show_opened_lesson == "2" %}
+            <br><table cellspacing='0'  border='1' bordercolor='#D0D0D0' cellpadding='4' align='left'>
+            <th>File</th><th>Lesson</th>
+            {% for lf in lesson_files %}
+                <tr><td><a href={{url_for("static",filename=lf[1].file | replace("/static/","")) }}>{{lf[1].filename}}</a></td><td>{{lf[0].lesson_name}}</td></tr>
+            {% endfor %}
+            </table>
+            <br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br>
+        {% endif %}
+        {% if show_opened_lesson == "3" %}
+            <br><table cellspacing='0'  border='1' bordercolor='#D0D0D0' cellpadding='4' align='left'>
+            <th>Username</th><th>Real Name</th><th>Topic</th><th>Lesson</th>
+            {% for ld in lesson_discussions %}
+                <tr><td><a href={{url_for(".user",username=ld[3].username) }}>{{ld[3].username}}</a></td><td>{{ld[3].name}}</td><td><a href="{{ url_for('.post',id=ld[2].id) }}">{{ld[2].topic}}</a></td><td>{{ld[0].lesson_name+ld[1].year+ld[1].season}}</td></tr>
+            {% endfor %}
+            </table>
+            <br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br>
+        {% endif %}
+        {% if show_opened_lesson == "4" %}
+            <br><table cellspacing='0'  border='1' bordercolor='#D0D0D0' cellpadding='4' align='left'>
+            <th>Username</th><th>Real Name</th><th>Lesson</th>{% if current_user.teacher and current_user==user %}<th>Confirmed</th><th>Operation</th>{% endif %}
+            {% for ls in lesson_students %}
+                <tr><td><a href={{url_for(".user",username=ls[2].username) }}>{{ls[2].username}}</a></td>
+                    <td>{{ ls[2].name }}</td>
+                    <td>{{ ls[0].lesson_name+ls[1].year+ls[1].season }}</td>
+                    {% if current_user.teacher and current_user==user %}
+                        <td>{{ ls[3].confirm }}</td>
+                        {% if ls[3].confirm %}
+                            <td><a onclick="if(confirm('Are you sure to delete?')==true)window.location.href='{{ url_for('main.del_student_from_teacher',newlesson_id=ls[1].id,student_id=ls[2].id) }}';">Delete</a></td></td>
+                        {% else %}
+                            <td><a href="{{ url_for('main.auth_student_from_teacher',newlesson_id=ls[1].id,student_id=ls[2].id)}}">Approve</a></td></tr>
+                        {% endif %}
+                    {% endif %}
+                </tr>
+            {% endfor %}
+            </table>
+             <br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br>
+           
+        {% endif %}
+        <br><br><br><br><br><br><br><br>
+    </div> 
+{% else %}
+
+
+    
+    <div class="page-header">
+        <a href="{{ url_for('main.change_pic') }}" title="更换头像">
+             {% if teacher.pic != None %}               
+                   <img class="img-rounded profile-thumbnail" src="{{ teacher.pic }}" width=200>
+             {% else %}
+                   <img class="img-rounded profile-thumbnail" src="{{ user.gravatar(size=200) }}">
+             {% endif %}                                                           
+        </a>
+    
+        <div class="profile-header">
+    
+            <h2><a href="{{ url_for('.user', username=user.username) }}">{{ user.name }}</a></h2>
+            {% if user.name or user.location or user.tel %}
+            <p><small>学校：{{ teacher.school }}
+             <p>研究领域：{{ teacher.field }}</p>
+            {% endif %}
+           
+           {% if current_user.can(Permission.FOLLOW) and user != current_user and current_user.is_following(user) %}
+               <a style="text-decoration:none" href="mailto: {{ user.email }}">  {{ user.email }}  </a>
+           {% endif %}
+            </p>
+            {% if current_user.is_administrator() %}
+            <p><a href="mailto:{{ user.email }}">{{ user.email }}</a></p>
+            {% endif %}
+            <p>注册于：{{ moment(user.member_since).fromNow() }}</p>
+                     <p>上次登录：{{ moment(user.last_seen).fromNow() }}</p></small>
+           <p></p>       
+                {% if teacher.teacher_id == current_user.id %}
+                       <p><a href="{{url_for('main.edit_teacher',id=current_user.id)}}">修改老师资料</a></p>
+           {% endif %}
+           
+            <p>
+                <a href="{{ url_for('.show_opened_lesson',id=teacher.id) }}"><small>课程</small><span class="badge">{{ teacher.count_lesson() }}</span></a>       
+                &nbsp&nbsp<a href="{{ url_for('.show_opened_lesson_file',id=teacher.id) }}"><small>文件</small><span class="badge">{{ teacher.count_file() }}</span></a>
+                <br><a href="{{ url_for('.show_opened_lesson_discussion',id=teacher.id) }}"><small>讨论</small><span class="badge">{{ teacher.count_discussion() }}</span></a>
+                &nbsp&nbsp<a href="{{ url_for('.show_opened_lesson_student',id=teacher.id) }}"><small>学生</small><span class="badge">{{ teacher.count_student() }}</span></a>
+            </p>
+           
+                {% if teacher.teacher_id == current_user.id %}
+                           <p><a class="btn btn-default" href="{{url_for('main.open_lesson')}}">开课</a></p>
+           {% endif %}
+       </div>       
+    </div>
+    <div class="post-tabs">
+        <ul class="nav nav-tabs">
+            <li {% if show_opened_lesson != "1" and show_opened_lesson != "2"   and show_opened_lesson != "3"   and show_opened_lesson != "4"  %} class="active"{% endif %}><a href="{{ url_for('.show_about_teacher',id=teacher.id) }}">关于</a></li>
+            <li {% if show_opened_lesson == "1" %} class="active"{% endif %}><a href="{{ url_for('.show_opened_lesson',id=teacher.id) }}">课程</a></li>
+            <li {% if show_opened_lesson == "2" %} class="active"{% endif %}><a href="{{ url_for('.show_opened_lesson_file',id=teacher.id) }}">文件</a></li>
+            <li {% if show_opened_lesson == "3" %} class="active"{% endif %}><a href="{{ url_for('.show_opened_lesson_discussion',id=teacher.id) }}">讨论</a></li>
+            <li {% if show_opened_lesson == "4" %} class="active"{% endif %}><a href="{{ url_for('.show_opened_lesson_student',id=teacher.id) }}">学生</a></li>
+        </ul>
+    </div>  
+    <div class="post-body">
+        {% if show_opened_lesson != "1" and show_opened_lesson != "2"   and show_opened_lesson != "3"   and show_opened_lesson != "4"  %}
+            <br>
+            {% if teacher.about_teacher %}<p>{{ teacher.about_teacher_html | safe }}</p>{% endif %}
+        {% endif %}
+        {% if show_opened_lesson == "1" %}
+            <br>
+            <br><table cellspacing='0'  border='1' bordercolor='#D0D0D0' cellpadding='4' align='left'>
+            <th>课程名</th><th>关于</th><th>创建日</th>
+            {% for lesson in lessons %}
+            <tr><td><a href="{{ url_for('main.lesson',id=lesson.id) }}">{{ lesson.lesson_name }}</a></td>
+                <td>{{lesson.about_lesson_html[0:100] | safe}}......</td>
+                <td>{{moment(lesson.timestamp).format("YY/MM/DD")}}
+            </tr>
+            {% endfor %}
+            </table>
+            <br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br>
+        {% endif %}
+        {% if show_opened_lesson == "2" %}
+            <br><table cellspacing='0'  border='1' bordercolor='#D0D0D0' cellpadding='4' align='left'>
+            <th>文件</th><th>课程</th>
+            {% for lf in lesson_files %}
+                <tr><td><a href={{url_for("static",filename=lf[1].file | replace("/static/","")) }}>{{lf[1].filename}}</a></td><td>{{lf[0].lesson_name}}</td></tr>
+            {% endfor %}
+            </table>
+            <br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br>
+        {% endif %}
+        {% if show_opened_lesson == "3" %}
+            <br><table cellspacing='0'  border='1' bordercolor='#D0D0D0' cellpadding='4' align='left'>
+            <th>网名</th><th>真名</th><th>标题</th><th>课程</th>
+            {% for ld in lesson_discussions %}
+                <tr><td><a href={{url_for(".user",username=ld[3].username) }}>{{ld[3].username}}</a></td><td>{{ld[3].name}}</td><td><a href="{{ url_for('.post',id=ld[2].id) }}">{{ld[2].topic}}</a></td><td>{{ld[0].lesson_name+ld[1].year+ld[1].season}}</td></tr>
+            {% endfor %}
+            </table>
+            <br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br>
+        {% endif %}
+        {% if show_opened_lesson == "4" %}
+            <br><table cellspacing='0'  border='1' bordercolor='#D0D0D0' cellpadding='4' align='left'>
+            <th>网名</th><th>真名</th><th>课程</th>{% if current_user.teacher and current_user==user %}<th>批准否</th><th>操作</th>{% endif %}
+            {% for ls in lesson_students %}
+                <tr><td><a href={{url_for(".user",username=ls[2].username) }}>{{ls[2].username}}</a></td>
+                    <td>{{ ls[2].name }}</td>
+                    <td>{{ ls[0].lesson_name+ls[1].year+ls[1].season }}</td>
+                    {% if current_user.teacher and current_user==user %}
+                        <td>{{ ls[3].confirm }}</td>
+                        {% if ls[3].confirm %}
+                            <td><a onclick="if(confirm('确定删除？')==true)window.location.href='{{ url_for('main.del_student_from_teacher',newlesson_id=ls[1].id,student_id=ls[2].id) }}';">删除</a></td></td>
+                        {% else %}
+                            <td><a href="{{ url_for('main.auth_student_from_teacher',newlesson_id=ls[1].id,student_id=ls[2].id)}}">批准</a></td></tr>
+                        {% endif %}
+                    {% endif %}
+                </tr>
+            {% endfor %}
+            </table>
+             <br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br>
+           
+        {% endif %}
+            
+    </div> 
+{% endif %}
+<br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br>
+
+{% endblock %}

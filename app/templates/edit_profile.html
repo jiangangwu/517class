@@ -1,0 +1,19 @@
+{% extends "base.html" %}
+{% import "bootstrap/wtf.html" as wtf %}
+{% import "_macros.html" as macros %}
+
+{% block title %}{% if english == "yes" %}Modify my profile{% else %}改资料{% endif %}{% endblock %}
+
+{% block page_content %}
+<div class="col-md-full">
+    {{ wtf.quick_form(form) }}
+<br><p style="color:gray">{% if english == "yes" %}Notice: You can select classes after you modified your profile.{% else %}注：完善资料后，可以选课或登记为老师。{% endif %}</p>
+</div>
+
+
+{% endblock %}
+
+{% block scripts %}
+{{ super() }}
+{{ pagedown.include_pagedown() }}
+{% endblock %}

@@ -1,0 +1,111 @@
+{% if english == "yes" %}
+    
+    
+    <ul class="comments">
+        {% for letter in letters %}
+        <li class="comment">
+            <div class="comment-thumbnail">
+                <a href="{{ url_for('.user', username=letter.author.username) }}">
+             {% if letter.author.avatar_file != None  %}               
+                   <img class="img-rounded profile-thumbnail" src="{{ letter.author.avatar_file }}" height=40 width=40>
+             {% else %}
+                   <img class="img-rounded profile-thumbnail" src="{{ letter.author.gravatar(size=40) }}">
+             {% endif %}                                                           
+                </a>
+            </div>
+            <div class="comment-content">
+                <div class="comment-date">{{ moment(letter.timestamp).fromNow() }}</div>
+                <div class="comment-author"><a href="{{ url_for('.user', username=letter.author.username) }}">{{ letter.author.username }}</a></div>
+                <div class="comment-body">
+                    {% if letter.disabled %}
+                    <p><i>The letter has been set invalid by administrator.</i></p>
+                    {% endif %}
+                    {% if moderate or not letter.disabled %}
+                        {% if letter.body_html %}
+                            {{ letter.body_html | safe }}
+                        {% else %}
+                            {{ letter.body }}
+                        {% endif %}
+                    {% endif %}
+                </div>
+                {% if moderate %}
+                    <br>
+                    {% if letter.disabled %}
+                    <a class="btn btn-default btn-xs" href="{{ url_for('.moderate_enable', id=letter.id, page=page) }}">Make valid</a>
+                    {% else %}
+                    <a class="btn btn-danger btn-xs" href="{{ url_for('.moderate_disable', id=letter.id, page=page) }}">Make invalid</a>
+                    {% endif %}
+                {% endif %}
+    
+                {% if letter.author_id == current_user.id %}
+                    <br>
+                <div align=right class="post_footer"><a onclick='if(confirm("Confirm to delete?")==true)window.location.href=
+                    "{{ url_for('.del_letter',id=letter.id,id2=post.id) }}";' style='text-decoration:none;'>
+                       <span class="label label-default">Delete</span></a> 
+                </div>   
+                {% endif %}
+    
+            </div>
+        </li>
+        {% endfor %}
+    </ul>
+    
+    
+    
+
+
+{% else %}
+
+    
+    
+    <ul class="comments">
+        {% for letter in letters %}
+        <li class="comment">
+            <div class="comment-thumbnail">
+                <a href="{{ url_for('.user', username=letter.author.username) }}">
+             {% if letter.author.avatar_file != None  %}               
+                   <img class="img-rounded profile-thumbnail" src="{{ letter.author.avatar_file }}" height=40 width=40>
+             {% else %}
+                   <img class="img-rounded profile-thumbnail" src="{{ letter.author.gravatar(size=40) }}">
+             {% endif %}                                                           
+                </a>
+            </div>
+            <div class="comment-content">
+                <div class="comment-date">{{ moment(letter.timestamp).fromNow() }}</div>
+                <div class="comment-author"><a href="{{ url_for('.user', username=letter.author.username) }}">{{ letter.author.username }}</a></div>
+                <div class="comment-body">
+                    {% if letter.disabled %}
+                    <p><i>该评论被协管员设为无效。</i></p>
+                    {% endif %}
+                    {% if moderate or not letter.disabled %}
+                        {% if letter.body_html %}
+                            {{ letter.body_html | safe }}
+                        {% else %}
+                            {{ letter.body }}
+                        {% endif %}
+                    {% endif %}
+                </div>
+                {% if moderate %}
+                    <br>
+                    {% if letter.disabled %}
+                    <a class="btn btn-default btn-xs" href="{{ url_for('.moderate_enable', id=letter.id, page=page) }}">使有效</a>
+                    {% else %}
+                    <a class="btn btn-danger btn-xs" href="{{ url_for('.moderate_disable', id=letter.id, page=page) }}">使无效</a>
+                    {% endif %}
+                {% endif %}
+    
+                {% if letter.author_id == current_user.id %}
+                    <br>
+                <div align=right class="post_footer"><a onclick='if(confirm("确认删除？")==true)window.location.href=
+                    "{{ url_for('.del_letter',id=letter.id,id2=post.id) }}";' style='text-decoration:none;'>
+                       <span class="label label-default">删除</span></a> 
+                </div>   
+                {% endif %}
+    
+            </div>
+        </li>
+        {% endfor %}
+    </ul>
+
+
+{% endif %}

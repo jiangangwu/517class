@@ -1,0 +1,229 @@
+{% extends "base.html" %}
+
+{% block title %}{% if english == "yes" %}Date calculator{% else %}日期计算{% endif %}{% endblock title%}
+
+
+{% block page_content %}
+
+
+
+{% if english == "yes" %}
+
+
+
+
+
+
+
+<script>
+window.onload=function(){
+var date=new Date();
+document.getElementById("SY").value=date.getFullYear();
+document.getElementById("SM").value=date.getMonth()+1;
+document.getElementById("SD").value=date.getDate();
+
+document.getElementById("SY2").value=date.getFullYear();
+document.getElementById("SM2").value=date.getMonth()+1;
+document.getElementById("SD2").value=date.getDate();
+                       
+document.getElementById("SY3").value=date.getFullYear();                       
+}
+</script>
+
+<script>
+
+var hzWeek= new Array("Sunday","Monday","Tuesday","Wedesday","Thursday","Friday","Saturday","Sunday");function cweekday(wday){return hzWeek[wday];}
+
+function cala()
+{
+y=document.getElementById("SY").value;
+m=document.getElementById("SM").value;
+d=document.getElementById("SD").value;
+ddd=document.getElementById("decday").value;
+
+ttt=new Date(y,m-1,d).getTime()+ddd*24000*3600;
+
+theday=new Date();
+theday.setTime(ttt);
+
+document.getElementById("result1").innerHTML=theday.getFullYear()+"/"+(1+theday.getMonth())+"/"+theday.getDate()+"  "+" "+cweekday(theday.getDay());
+
+
+}
+
+
+function calb()
+{
+
+y2=document.getElementById("SY2").value;
+m2=document.getElementById("SM2").value;
+d2=document.getElementById("SD2").value;
+
+
+y3=document.getElementById("SY3").value;
+m3=document.getElementById("SM3").value;
+d3=document.getElementById("SD3").value;
+
+
+day2=new Date(y2,m2-1,d2);
+day3=new Date(y3,m3-1,d3);
+
+document.getElementById("result2").innerHTML=(day3-day2)/86400000;
+
+
+}
+
+
+</script>
+</head>
+
+<body bgcolor=eeeeee>
+
+<b>Date of days after/before</b>
+
+<br><br><input style="text-align:center" size=8 id=SY value=2017>Year<input style="text-align:center" size=4 id=SM value=7>Month<input style="text-align:center" size=4 id=SD value=1>Day
+<br><br>changed by
+<input style="text-align:center" size=8 id=decday value=-100>Day
+
+<br><br>is: <span style="color:red" style="text-align:center" id=result1></span>
+<br><br>
+<input type=button value="Calculate" onclick="cala()">
+
+<br><br>
+
+
+
+<b>Difference of Days</b>
+<br><br>
+<input style="text-align:center" size=8 id=SY2 value=2017>Year
+<input style="text-align:center" size=4 id=SM2 value=7>Month
+<input style="text-align:center" size=4 id=SD2 value=1>Day
+<br><br>Between
+<br><br>
+<input style="text-align:center" size=8 id=SY3  value=2018 >Year
+<input style="text-align:center" size=4 id=SM3 value=12>Mouth
+<input style="text-align:center" size=4 id=SD3 value=31>Day
+<br><br>Difference of days: <span style="color:red" id=result2></span>
+<br><br>
+<input style="text-align:center" type=button value="Calculate" onclick="calb()">
+<br>
+<br>
+<br>
+
+
+<br>
+<br>
+
+
+{% else %}
+
+
+
+
+
+
+<script>
+window.onload=function(){
+var date=new Date();
+document.getElementById("SY").value=date.getFullYear();
+document.getElementById("SM").value=date.getMonth()+1;
+document.getElementById("SD").value=date.getDate();
+
+document.getElementById("SY2").value=date.getFullYear();
+document.getElementById("SM2").value=date.getMonth()+1;
+document.getElementById("SD2").value=date.getDate();
+                       
+document.getElementById("SY3").value=date.getFullYear();                       
+}
+</script>
+
+<script>
+
+var hzWeek= new Array("日","一","二","三","四","五","六","日");function cweekday(wday){return hzWeek[wday];}
+
+function cala()
+{
+y=document.getElementById("SY").value;
+m=document.getElementById("SM").value;
+d=document.getElementById("SD").value;
+ddd=document.getElementById("decday").value;
+
+ttt=new Date(y,m-1,d).getTime()+ddd*24000*3600;
+
+theday=new Date();
+theday.setTime(ttt);
+
+document.getElementById("result1").innerHTML=theday.getFullYear()+"年"+(1+theday.getMonth())+"月"+theday.getDate()+"日"+"星期"+cweekday(theday.getDay());
+
+
+}
+
+
+function calb()
+{
+
+y2=document.getElementById("SY2").value;
+m2=document.getElementById("SM2").value;
+d2=document.getElementById("SD2").value;
+
+
+y3=document.getElementById("SY3").value;
+m3=document.getElementById("SM3").value;
+d3=document.getElementById("SD3").value;
+
+
+day2=new Date(y2,m2-1,d2);
+day3=new Date(y3,m3-1,d3);
+
+document.getElementById("result2").innerHTML=(day3-day2)/86400000;
+
+
+}
+
+
+</script>
+</head>
+
+<body bgcolor=eeeeee>
+
+<b>推算几天后（前）的日期</b>
+
+<br><br>与<input style="text-align:center" size=8 id=SY value=2017>年<input style="text-align:center" size=4 id=SM value=7>月<input style="text-align:center" size=4 id=SD value=1>日
+<br><br>相差
+<input style="text-align:center" size=8 id=decday value=-100>天
+
+<br><br>是：<span style="color:red" style="text-align:center" id=result1></span>
+<br><br>
+<input type=button value="计算" onclick="cala()">
+
+<br><br>
+
+
+
+<b>计算日期差</b>
+<br><br>
+<input style="text-align:center" size=8 id=SY2 value=2017>年
+<input style="text-align:center" size=4 id=SM2 value=7>月
+<input style="text-align:center" size=4 id=SD2 value=1>日
+<br><br>和
+<br><br>
+<input style="text-align:center" size=8 id=SY3  value=2018 >年
+<input style="text-align:center" size=4 id=SM3 value=12>月
+<input style="text-align:center" size=4 id=SD3 value=31>日
+<br><br>相差天数：<span style="color:red" id=result2></span>
+<br><br>
+<input style="text-align:center" type=button value="计算" onclick="calb()">
+<br>
+<br>
+<br>
+
+
+<br>
+<br>
+
+{% endif %}
+
+
+
+
+{% endblock %}

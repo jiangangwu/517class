@@ -1,0 +1,44 @@
+{% extends "base.html" %}
+{% import "bootstrap/wtf.html" as wtf %}
+{% import "_macros.html" as macros %}
+
+{% block title %}{% if english == "yes" %}Comments on my blogs{% else %}得到的评论{% endif %}{% endblock %}
+
+{% block page_content %}
+<div class="page-header"><h2>{% if english == "yes" %}Comments on my blogs{% else %}得到的评论{% endif %}</h2></div>
+<div class="post-body">
+{% for pc in post_comments2 %}
+      <div class="post-content">
+            <p>
+                      <div class="comment-thumbnail">
+         <a href="{{ url_for('.user', username=pc[1].author.username) }}">
+         {% if pc[1].author.avatar_file != None  %}               
+               <img class="img-rounded profile-thumbnail" src="{{ pc[1].author.avatar_file }}" height=25 width=25>
+         {% else %}
+               <img class="img-rounded profile-thumbnail" src="{{ pc[1].author.gravatar(size=25) }}">
+         {% endif %}                                                           
+            </a>
+        </div>
+            &nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp
+            <a href="{{ url_for('.user', username=pc[1].author.username) }}">{{pc[1].author.username}}</a> on <a href="{{ url_for('.post', id=pc[0].id) }}">{{ pc[0].topic }}</a>（{{ moment(pc[1].timestamp).fromNow() }}）</p>
+            <p>{{ pc[1].body_html | safe }}</p><br>
+     </div>
+{% endfor %}
+</div>
+
+
+
+
+{% if pagination %}
+<div class="pagination">
+    {{ macros.pagination_widget(pagination, '.comments_on_me',user_id=current_user.id) }}
+</div>
+{% endif %}
+<br/><br/><br/><br/><br/><br/>
+{% endblock %}
+
+{% block scripts %}
+{{ super() }}
+{{ pagedown.include_pagedown() }}
+
+{% endblock %}

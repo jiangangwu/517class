@@ -1,0 +1,20 @@
+{% extends "base.html" %}
+{% import "bootstrap/wtf.html" as wtf %}
+{% import "_macros.html" as macros %}
+
+{% block title %}{% if english == "yes" %}Upload a file{% else %}上传文件{% endif %}{% endblock title %}
+
+{% block page_content %}
+<div align=right class="post_footer"><a onclick='if(confirm("确认删除？")==true)window.location.href=
+    "{{ url_for('.del_lesson_file',file_id=file_id,lesson_id=lesson_id) }}";' style='text-decoration:none;'>
+       <span class="label label-default">删除</span></a> </div>
+{% if current_user.is_authenticated and current_user.can(Permission.WRITE_ARTICLES) %}
+    {{ wtf.quick_form(form) }}
+{% endif %}
+<br><br><br>
+{% endblock %}
+
+{% block scripts %}
+{{ super() }}
+{{ pagedown.include_pagedown() }}
+{% endblock %}

@@ -1,0 +1,17 @@
+{% extends "base.html" %}
+{% import "_macros.html" as macros %}
+
+{% block title %}{% if english == "yes" %}Audit comments{% else %}审核评论{% endif %}{% endblock %}
+
+{% block page_content %}
+<div class="page-header">
+    <h1>{% if english == "yes" %}Audit comments{% else %}审核评论{% endif %}</h1>
+</div>
+{% set moderate = True %}
+{% include '_comments.html' %}
+{% if pagination %}
+<div class="pagination">
+    {{ macros.pagination_widget(pagination, '.moderate') }}
+</div>
+{% endif %}
+{% endblock %}

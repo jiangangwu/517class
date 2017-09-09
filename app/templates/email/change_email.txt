@@ -1,0 +1,16 @@
+尊敬的{{ user.username }}：
+
+您好！
+
+如果您想重设您的邮箱，请点击以下链接：
+
+{{ url_for('main.change_email', token=token, _external=True) }}
+
+假如您不确定是否需要这么做，请忽视此邮件。
+
+祝安！
+
+--
+517上课
+
+注：此邮件无需回复。

@@ -1,0 +1,33 @@
+{% extends "base.html" %}
+{% import "bootstrap/wtf.html" as wtf %}
+{% import "_macros.html" as macros %}
+
+{% block title %}{% if english == "yes" %}Lesson{% else %}课程{% endif %}{% endblock title %}
+
+{% block page_content %}
+<div class="post-tabs">
+    <ul class="nav nav-tabs">
+        <li {% if show_all_teacher != "1" %} class="active"{% endif %}><a href="{{ url_for('.show_all_lesson') }}">{% if english == "yes" %}Lesson{% else %}课程{% endif %}</a></li>
+        <li {% if show_all_teacher == "1" %} class="active"{% endif %}><a href="{{ url_for('.show_all_teacher') }}">{% if english == "yes" %}Teacher{% else %}老师{% endif %}</a></li>
+   </ul>
+   {% if show_all_teacher == "1" %} 
+   <br>
+    {% include '_teachers.html' %}   
+   {% else %}
+   
+    {% include '_lessons.html' %}    
+    {% endif %}
+</div>
+{% if pagination and show_all_teacher == "0"%}
+<div class="pagination">
+    {{ macros.pagination_widget(pagination, '.index') }}
+</div>
+{% endif %}
+
+
+{% endblock %}
+
+{% block scripts %}
+{{ super() }}
+{{ pagedown.include_pagedown() }}
+{% endblock %}

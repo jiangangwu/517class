@@ -1,0 +1,55 @@
+{% extends "base.html" %}
+{% import "bootstrap/wtf.html" as wtf %}
+{% import "_macros.html" as macros %}
+
+{% block title %}{% if english == "yes" %}517Class{% else %}517上课{% endif %}{% endblock title %}
+
+
+{% block page_content %}
+
+{% if english == "yes" %}
+<div class="post-tabs">
+    <ul class="nav nav-tabs">
+        <li class="active"><a href="{{ url_for('.show_all') }}">Blog</a></li>
+<!--        {% if current_user.is_authenticated %}
+        <li><a href="{{ url_for('.show_followed') }}">Concern</a></li>
+        {% endif %}   --> 
+       <li><a href="{{ url_for('.lesson_main') }}">Lesson</a></li>           
+  
+        {% if current_user.is_authenticated %}
+        <li><a href="{{ url_for('.write',tag='posts') }}">Write</a></li>
+        <li><a href="{{ url_for('.user',username=current_user.username) }}">Me</a></li>
+        {% endif %}   
+    </ul>
+</div>
+{% else %}
+<div class="post-tabs">
+    <ul class="nav nav-tabs">
+        <li class="active"><a href="{{ url_for('.show_all') }}">博客</a></li>
+<!--        {% if current_user.is_authenticated %}
+        <li><a href="{{ url_for('.show_followed') }}">关注</a></li>
+        {% endif %}   --> 
+        <li><a href="{{ url_for('.lesson_main') }}">课程</a></li>           
+  
+        {% if current_user.is_authenticated %}
+        <li><a href="{{ url_for('.write',tag='posts') }}">发贴</a></li>
+        <li><a href="{{ url_for('.user',username=current_user.username) }}">个人</a></li>
+        {% endif %}   
+    </ul>
+</div>
+{% endif %}
+
+
+    {% include '_posts.html' %}
+
+{% if pagination %}
+<div class="pagination">
+    {{ macros.pagination_widget(pagination, '.index') }}
+</div>
+{% endif %}
+{% endblock %}
+
+{% block scripts %}
+{{ super() }}
+{{ pagedown.include_pagedown() }}
+{% endblock %}

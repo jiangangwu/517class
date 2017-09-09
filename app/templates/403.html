@@ -1,0 +1,9 @@
+{% extends "base.html" %}
+
+{% block title %}{% if english == "yes" %}Unauthorized{% else %}未经允许{% endif %}{% endblock %}
+
+{% block page_content %}
+<div class="page-header">
+    <h1>{% if english == "yes" %}Unauthorized{% else %}未经允许{% endif %}</h1>
+</div>
+{% endblock %}

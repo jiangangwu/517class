@@ -1,0 +1,83 @@
+{% extends "base.html" %}
+{% import "bootstrap/wtf.html" as wtf %}
+
+{% block title %}{% if english == "yes" %}Upload the teacher's portrait{% else %}上传教师头像{% endif %}{% endblock %}
+
+{% block page_content %}
+
+
+{% if english == "yes" %}
+
+
+
+
+
+
+
+
+<div class="page-header">
+    <h2>Upload portrait of the teacher</h2>
+</div>
+<div class="col-md-4">
+    <form action="" method=post enctype=multipart/form-data name=upload>
+        <input type=file name=file>
+        <br/>
+        <font color=gray>Notice: you can upload jpg/jpeg/png/jif.</font>
+        <br/>
+        <br/>
+        <input type=submit value=Upload onclick="return check();">
+    </form>
+    
+    <script type="text/javascript"> 
+    function check(){ 
+            if(document.upload.file.value=='') { 
+                    alert("The file cannot be absent."); 
+                    return false; 
+            } 
+    } 
+    </script>
+    
+</div>
+
+
+
+{% else %}
+
+
+
+
+
+
+
+
+<div class="page-header">
+    <h2>上传教师头像</h2>
+</div>
+<div class="col-md-4">
+    <form action="" method=post enctype=multipart/form-data name=upload>
+        <input type=file name=file>
+        <br/>
+        <font color=gray>注：请上传长宽相等的jpg、jpeg或png图片。</font>
+        <br/>
+        <br/>
+        <input type=submit value=上传 onclick="return check();">
+    </form>
+    
+    <script type="text/javascript"> 
+    function check(){ 
+            if(document.upload.file.value=='') { 
+                    alert("文件不能为空"); 
+                    return false; 
+            } 
+    } 
+    </script>
+    
+</div>
+
+
+{% endif %}
+
+
+
+
+{% endblock %}

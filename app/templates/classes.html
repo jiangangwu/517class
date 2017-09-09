@@ -1,0 +1,10 @@
+{% extends "base.html" %}
+{% import "_macros.html" as macros %}
+
+{% block title %}{% if english == "yes" %}Lessons{% else %}课程{% endif %}{% endblock %}
+
+{% block page_content %}
+<div class="profile-header">
+        <h2>{% if english == "yes" %}Lessons{% else %}课程{% endif %}</h2>
+</div>
+{% endblock %}

@@ -1,0 +1,20 @@
+{% extends "base.html" %}
+{% import "bootstrap/wtf.html" as wtf %}
+{% import "_macros.html" as macros %}
+
+{% block title %}{% if english == "yes" %}Register as a teacher{% else %}登记为老师{% endif %}{% endblock %}
+
+{% block page_content %}
+
+<div class="col-md-full">
+    {{ wtf.quick_form(form) }}
+</div>
+
+
+
+{% endblock %}
+
+{% block scripts %}
+{{ super() }}
+{{ pagedown.include_pagedown() }}
+{% endblock %}

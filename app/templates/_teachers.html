@@ -1,0 +1,69 @@
+{% if english == "yes" %}
+
+<ul class="posts">
+        <table cellspacing='5px'  border='1' bordercolor='#D0D0D0' cellpadding='4' align='left'>
+         <th>Username</th><th>Real name</th><th>School</th><th>Research areas</th><th>Lessons</th>           
+            {%- for u in teachers_all %}
+                    {% if u[2] | length >0 %}
+                                <tr><td><a href="{{url_for('main.teacher',id=u[0].id)}}">
+                              {% if u[0].pic != None %}               
+                               <img class="img-rounded profile-thumbnail" src="{{ u[0].pic }}" width=40 height=40>
+                             {% else %}
+                               <img class="img-rounded profile-thumbnail" src="{{ u[1].gravatar(size=40) }}">
+                             {% endif %}  
+                
+                                                &nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp <br><br>  {{u[1].username}}</a></td>
+                                    <td>{{u[1].name}}</td><td>{{u[0].school}}</td>
+                                    <td>{{u[0].field}}</td><td>
+                                          {% for lesson in u[2] %}
+                                                 <a href={{url_for('main.lesson',id=lesson.id)}}>{{lesson.lesson_name}}</a><br/>
+                                          {% endfor %}
+                                          </td><tr>
+                    {% endif %}
+            {% endfor -%}
+        </table>
+</ul>
+
+
+
+
+
+
+
+
+{% else %}
+
+
+
+
+
+<ul class="posts">
+        <table cellspacing='5px'  border='1' bordercolor='#D0D0D0' cellpadding='4' align='left'>
+         <th>用户名</th><th>姓名</th><th>学校</th><th>研究领域</th><th>课程</th>       
+            {%- for u in teachers_all %}
+            {% if u[2] | length >0 %}
+                <tr><td><a href="{{url_for('main.teacher',id=u[0].id)}}">
+                                               
+                            {% if u[0].pic != None %}               
+                           <img class="img-rounded profile-thumbnail" src="{{ u[0].pic }}" width=40 height=40>
+                             {% else %}
+                           <img class="img-rounded profile-thumbnail" src="{{ u[1].gravatar(size=40) }}">
+                             {% endif %}  
+            
+                                               
+                                               
+                               &nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp <br><br>       {{u[1].username}}</a></td>
+                                <td>{{u[1].name}}</td><td>{{u[0].school}}</td>
+                                <td>{{u[0].field}}</td><td>
+                                      {% for lesson in u[2] %}
+                                             <a href={{url_for('main.lesson',id=lesson.id)}}>{{lesson.lesson_name}}</a><br/>
+                                      {% endfor %}
+                          </td><tr>
+            {% endif %}
+            {% endfor -%}
+        </table>
+</ul>
+
+
+
+{% endif %}

@@ -1,0 +1,35 @@
+{% extends "base.html" %}
+{% import "bootstrap/wtf.html" as wtf %}
+{% import "_macros.html" as macros %}
+
+{% block title %}{% if english == "yes" %}Criticism{% else %}评语{% endif %}{% endblock title %}
+
+{% block page_content %}
+
+    {% if english == "yes" %}
+     
+            <h3>Your comment on <a href={{ url_for(".user",username=user.username)}}>&nbsp{{ user.name}}&nbsp</a>is:</h3><br><br>
+            {% if current_user.is_authenticated and current_user.can(Permission.WRITE_ARTICLES) %}
+            
+                {{ wtf.quick_form(form) }}
+            
+            {% endif %}
+            
+    {% else %}
+    
+            <h3>您对<a href={{ url_for(".user",username=user.username)}}>&nbsp{{ user.name}}&nbsp</a>的练习的评论是：</h3><br><br>
+            {% if current_user.is_authenticated and current_user.can(Permission.WRITE_ARTICLES) %}
+            
+                {{ wtf.quick_form(form) }}
+            
+            {% endif %}
+    
+    {% endif %}
+            <br/><br/><br/>
+
+{% endblock %}
+
+{% block scripts %}
+{{ super() }}
+{{ pagedown.include_pagedown() }}
+{% endblock %}

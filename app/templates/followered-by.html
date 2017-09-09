@@ -1,0 +1,81 @@
+{% extends "base.html" %}
+{% import "_macros.html" as macros %}
+
+{% block title %}{{ user.username }}{% if english == "yes" %}&nbsp followed &nbsp{% else %}关注了{% endif %}{% endblock %}
+
+{% block page_content %}
+
+{% if english == "yes" %}
+
+
+
+
+<div class="page-header">
+    <h2>{{ user.username }} has followed: </h2>
+</div>
+<table class="table table-hover followers">
+    <thead><tr><th>User</th><th>from</th></tr></thead>
+    {% for follow in follows %}
+    {% if follow.user != user %}
+    <tr>
+        <td>
+            <a href="{{ url_for('.user', username = follow.user.username) }}">
+         {% if follow.user.avatar_file != None %}               
+               <img class="img-rounded profile-thumbnail" src="{{ follow.user.avatar_file }}" width=28 height=28>
+         {% else %}
+               <img class="img-rounded profile-thumbnail" src="{{ follow.user.gravatar(size=28) }}">
+         {% endif %}  
+                &nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp{{ follow.user.username }}
+            </a>
+        </td>
+        <td>{{ moment(follow.timestamp).format('L') }}</td>
+    </tr>
+    {% endif %}
+    {% endfor %}
+</table>
+<div class="pagination">
+    {{ macros.pagination_widget(pagination, endpoint, username = user.username) }}
+</div>
+
+
+
+
+
+{% else %}
+
+
+
+<div class="page-header">
+    <h2>{{ user.username }}关注了：</h2>
+</div>
+<table class="table table-hover followers">
+    <thead><tr><th>用户</th><th>自从</th></tr></thead>
+    {% for follow in follows %}
+    {% if follow.user != user %}
+    <tr>
+        <td>
+            <a href="{{ url_for('.user', username = follow.user.username) }}">
+         {% if follow.user.avatar_file != None %}               
+               <img class="img-rounded profile-thumbnail" src="{{ follow.user.avatar_file }}" width=28 height=28>
+         {% else %}
+               <img class="img-rounded profile-thumbnail" src="{{ follow.user.gravatar(size=28) }}">
+         {% endif %}  
+                &nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp{{ follow.user.username }}
+            </a>
+        </td>
+        <td>{{ moment(follow.timestamp).format('L') }}</td>
+    </tr>
+    {% endif %}
+    {% endfor %}
+</table>
+<div class="pagination">
+    {{ macros.pagination_widget(pagination, endpoint, username = user.username) }}
+</div>
+
+
+
+
+
+
+{% endif %}
+{% endblock %}

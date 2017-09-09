@@ -1,0 +1,14 @@
+{% extends "base.html" %}
+{% import "bootstrap/wtf.html" as wtf %}
+
+{% block title %}{% if english == "yes" %}Modify Email{% else %}修改邮箱{% endif %}{% endblock %}
+
+{% block page_content %}
+
+<div class="page-header">
+    <h2>{% if english == "yes" %}Modify Email{% else %}修改邮箱{% endif %}</h2>
+</div>
+<div class="col-md-4">
+    {{ wtf.quick_form(form) }}
+</div>
+{% endblock %}

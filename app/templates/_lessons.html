@@ -1,0 +1,124 @@
+{% if english == "yes" %}
+
+
+
+<ul class="posts">
+    {% for i in range(n) %}
+    <li class="post">
+        <div class="post-thumbnail">
+            <a href="{{ url_for('.user', username=users[i].username) }}">
+         {% if users[i].avatar_file != None  %}               
+               <img class="img-rounded profile-thumbnail" src="{{ users[i].avatar_file }}" height=40 width=40>
+         {% else %}
+               <img class="img-rounded profile-thumbnail" src="{{ users[i].gravatar(size=40) }}">
+         {% endif %}                                                           
+            </a>
+        </div>
+        <div class="post-content">
+            <div class="post-date"><small>{{ moment(lessons[i].timestamp).fromNow() }}</small></div>
+            <div class="post-author"><a href="{{ url_for('.user', username=users[i].username) }}">{{ users[i].username }}</a></div>
+            <div class="post-body">
+            
+                {% if lessons[i].lesson_name %}
+                    <h2><a href="{{ url_for('.lesson', id=lessons[i].id) }}">{{ lessons[i].lesson_name }}</a></h2>
+                {% endif %}
+              
+                {% if lessons[i].pic %}             
+                <p><img width=256 name="{{'pic'+lessons[i].id | string }}" onclick="if({{'pic'+lessons[i].id | string }}.width==256){{'pic'+lessons[i].id | string }}.width=512;else{ {{'pic'+lessons[i].id | string }}.width=256;}" src="{{ lessons[i].pic }}" ></p>                            
+                {% endif %}                                                           
+                
+                {% if lessons[i].about_lesson_html | length > 500 %}
+                    {{ lessons[i].about_lesson_html[0:500] | safe }}
+                "……<br/><br/>
+                    <a href="{{ url_for('.lesson', id=lessons[i].id) }}">show only 500 characters, to show full article please click here...</a>
+                    {% else %}
+                    {{ lessons[i].about_lesson_html | safe }}
+                {% endif %}
+            </div>
+            <div class="post-footer">
+                {% if current_user.id == lessons[i].teacher_id %}
+                <a href="{{ url_for('.edit_lesson', id=lessons[i].id) }}">
+                    <span class="label label-primary">Edit</span>
+                </a>
+                {% elif current_user.is_administrator() %}
+                <a href="{{ url_for('.edit_lesson', id=lessons[i].id) }}">
+                    <span class="label label-danger">Edit [Admin]</span>
+                </a>
+                {% endif %}
+                <a href="{{ url_for('.lesson', id=lessons[i].id) }}">
+                    <span class="label label-default">Link</span>
+                </a>
+        </div>
+        </div>
+    </li>
+    {% endfor %}
+</ul>
+
+
+
+
+
+
+
+
+{% else %}
+
+
+
+
+
+<ul class="posts">
+    {% for i in range(n) %}
+    <li class="post">
+        <div class="post-thumbnail">
+            <a href="{{ url_for('.user', username=users[i].username) }}">
+         {% if users[i].avatar_file != None  %}               
+               <img class="img-rounded profile-thumbnail" src="{{ users[i].avatar_file }}" height=40 width=40>
+         {% else %}
+               <img class="img-rounded profile-thumbnail" src="{{ users[i].gravatar(size=40) }}">
+         {% endif %}                                                           
+            </a>
+        </div>
+        <div class="post-content">
+            <div class="post-date"><small>{{ moment(lessons[i].timestamp).fromNow() }}</small></div>
+            <div class="post-author"><a href="{{ url_for('.user', username=users[i].username) }}">{{ users[i].username }}</a></div>
+            <div class="post-body">
+            
+                {% if lessons[i].lesson_name %}
+                    <h2><a href="{{ url_for('.lesson', id=lessons[i].id) }}">{{ lessons[i].lesson_name }}</a></h2>
+                {% endif %}
+              
+                {% if lessons[i].pic %}             
+                <p><img width=256 name="{{'pic'+lessons[i].id | string }}" onclick="if({{'pic'+lessons[i].id | string }}.width==256){{'pic'+lessons[i].id | string }}.width=512;else{ {{'pic'+lessons[i].id | string }}.width=256;}" src="{{ lessons[i].pic }}" ></p>                            
+                {% endif %}                                                           
+                
+                {% if lessons[i].about_lesson_html | length > 500 %}
+                    {{ lessons[i].about_lesson_html[0:500] | safe }}
+                "……<br/><br/>
+                    <a href="{{ url_for('.lesson', id=lessons[i].id) }}">仅显示500字，查看全文，请点此处……</a>
+                    {% else %}
+                    {{ lessons[i].about_lesson_html | safe }}
+                {% endif %}
+            </div>
+            <div class="post-footer">
+                {% if current_user.id == lessons[i].teacher_id %}
+                <a href="{{ url_for('.edit_lesson', id=lessons[i].id) }}">
+                    <span class="label label-primary">编辑</span>
+                </a>
+                {% elif current_user.is_administrator() %}
+                <a href="{{ url_for('.edit_lesson', id=lessons[i].id) }}">
+                    <span class="label label-danger">编辑 [Admin]</span>
+                </a>
+                {% endif %}
+                <a href="{{ url_for('.lesson', id=lessons[i].id) }}">
+                    <span class="label label-default">链接</span>
+                </a>
+        </div>
+        </div>
+    </li>
+    {% endfor %}
+</ul>
+
+
+
+{% endif %}
