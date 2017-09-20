@@ -139,7 +139,13 @@
           {% endif %}
           {% if show_my_private == "3" %}     
               {% for ab in atme_bodies %}
-                  <p>{{moment(ab[1].timestamp).format("YY/MM/DD HH:mm")}}&nbsp({{moment(ab[1].timestamp).fromNow()}}), {{ab[0].username_whoatme}}&nbsp@me&nbspin: <br><cite>&nbsp&nbsp&nbsp&nbsp<a href="{{url_for('.post',id=ab[1].post_id)}}">{{ab[1].body}}</a></cite></p>
+                  <p>{{moment(ab[1].timestamp).format("YY/MM/DD HH:mm")}}&nbsp({{moment(ab[1].timestamp).fromNow()}}), {{ab[0].username_whoatme}}&nbsp@me&nbspin: <br>
+                       {% if ab[1].post_id == None %}
+                           <cite>&nbsp&nbsp&nbsp&nbsp The original post has been deleted.</cite>
+                        {% else %}
+                           <cite>&nbsp&nbsp&nbsp&nbsp<a href="{{url_for('.post',id=ab[1].post_id)}}">{{ab[1].body}}</a></cite>
+                        {% endif %}
+                        </p>
               {% endfor %}
               {% if pagination_atme %}
                   <div class="pagination">
@@ -287,7 +293,14 @@
           {% if show_my_private == "3" %}  
               {% if atme_bodies != [] %}
                   {% for ab in atme_bodies %}
-                      <p>{{moment(ab[1].timestamp).format("YY/MM/DD HH:mm")}}（{{moment(ab[1].timestamp).fromNow()}}），<a href="{{ url_for('.user',username=ab[0].username_whoatme)}}">{{ab[0].username_whoatme}}</a>&nbsp@我&nbsp在：<br><cite>&nbsp&nbsp&nbsp&nbsp{% if ab[1].post_id != None %}<a href="{{ url_for('.post', id=ab[1].post_id) }}">{{ab[1].body}}</a>{%else%}{{ab[1].body}}（原帖子已经删除！）{% endif %}</cite></p>
+                      <p>{{moment(ab[1].timestamp).format("YY/MM/DD HH:mm")}}（{{moment(ab[1].timestamp).fromNow()}}），<a href="{{ url_for('.user',username=ab[0].username_whoatme)}}">{{ab[0].username_whoatme}}</a>&nbsp@我&nbsp在：<br>
+                                                  {% if ab[1].post_id == None %}
+                           <cite>&nbsp&nbsp&nbsp&nbsp 原帖已经删除</cite>
+                        {% else %}
+                           <cite>&nbsp&nbsp&nbsp&nbsp<a href="{{url_for('.post',id=ab[1].post_id)}}">{{ab[1].body}}</a></cite>
+                        {% endif %}
+                        </p>
+
                   {% endfor %}
               {% endif %}
               {% if pagination_atme %}
