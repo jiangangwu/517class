@@ -1,5 +1,5 @@
     
- <h2><b>517Class.ocm</b></h2>
+ <h2><b>517Class.com</b></h2>
 
 <pre align=center><big> Our mission is to become  <p><q><b>A Free Professional Education Service Platform</b></q></big>.</p></pre>
 
