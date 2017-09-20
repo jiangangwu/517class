@@ -1,4 +1,43 @@
+    
+    <h2><font style="font-weight:bold;font-family:impact;color:#0f88eb"><b><strong>517Class</strong></b></font></h2>
+    </div>
+<div class="col-md-8">
+
+<pre align=center><big> Our mission is to become  <p><q><b>A Free Professional Education Service Platform</b></q></big>.</p></pre>
+
+<p>Currently, the website has functions as below: 
+<ul><li>To write blogs
+</li><li>To at (@) somebody in a comment
+</li><li>To upload files, pictures, audio or video               
+</li><li>To register lessons
+</li><li>To upload files, pictures, audios or video for lessons
+</li><li>To open classes
+</li><li>To join classes
+</li><li>To select seats
+</li><li>To submit homeworks
+</li><li>To give comments and scores of homeworks 
+</li><li>To make attendance statistics
+</li><li>To select a replier randomly
+</li><li>To give course discussion or notice
+</li><li>To show various of notifications on homepages of person's, teacher's, lesson's and class'
+</li></ul></p>
+
+
+
+
+
+</div>
  
+
+
+
+
+
+
+
+
+
+
 <h2><b>517上课</b></h2>
 <div class="col-md-8"><p>
 <pre align=center><big><q>以发展为<b>免费的专业教育服务平台</b>为己任。</q></big></pre>
