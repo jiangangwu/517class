@@ -1,7 +1,5 @@
     
-    <h2><font style="font-weight:bold;font-family:impact;color:#0f88eb"><b><strong>517Class</strong></b></font></h2>
-    </div>
-<div class="col-md-8">
+ <h2><b>517Class.ocm</b></h2>
 
 <pre align=center><big> Our mission is to become  <p><q><b>A Free Professional Education Service Platform</b></q></big>.</p></pre>
 
