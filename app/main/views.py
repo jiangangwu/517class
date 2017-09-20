@@ -1057,8 +1057,8 @@ def write2(tag):
                 filename = secure_filename(file5.filename)
                 filename1 = current_user.email.replace('@','__').replace('.','__') \
                             + '__' +str(time.time()).replace('.','') + '.' + filename.split('.')[-1]
-                file5.save(os.path.join('app/static', 'video', filename1))
-                post.file5 = url_for('static',filename='%s/%s' % ('video', filename1))
+                file5.save(os.path.join('app/static', 'file', filename1))
+                post.file5 = url_for('static',filename='%s/%s' % ('file', filename1))
                 post.filename5 = file5.filename
 
         db.session.add(post)
@@ -1260,13 +1260,13 @@ def edit2(id):
             filename = secure_filename(file5.filename)
             filename1 = current_user.email.replace('@','__').replace('.','__') \
                         + '__' +str(time.time()).replace('.','') + '.' + filename.split('.')[-1]
-            file5.save(os.path.join('app/static', 'video', filename1))
+            file5.save(os.path.join('app/static', 'file', filename1))
             try:
                 os.remove("/root/517shangke/app"+post.file5)
             except:
                 pass
-            post.file5 = url_for('static',filename='%s/%s' % ('video', filename1))
-            post.filename4 = file5.filename
+            post.file5 = url_for('static',filename='%s/%s' % ('file', filename1))
+            post.filename5 = file5.filename
             
         db.session.commit()
         flash('帖子已经修改。')

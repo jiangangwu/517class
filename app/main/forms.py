@@ -286,6 +286,8 @@ class PostFormE2(FlaskForm):
         FileAllowed(['wav','mp3','ogg','Wav','Mp3','Ogg','WAV','MP3','OGG'],message='You can upload audio files less than 50M such as mp3/ogg/wav.')])            
     file4 = FileField(label='Video',validators=[
         FileAllowed(['Mp4','Ogg','Mpeg4','WebM','mp4','ogg','mpeg4','webm','MP4','OGG','MPEG4','WEBM','mov','MOV','Mov','avi','AVI','Avi','mpg','MPG','Mpg'],message='You can upload video files less than 50M such as mp4/mov/ogg/mpe4/webm.')])
+    file1 = FileField(label='File 1',validators=[
+        FileAllowed(['bmp','BMP','jif','JIF','JPG','jpg','JPEG','jpeg','PNG','png','txt','TXT','pdf','PDF','xls','XLS','xlsx','XLSX','ppt','PPT','pptx','PPTX','doc','DOC','docx','DOCX', 'zip', 'ZIP', 'rar', 'RAR'],message='You can upload txt\pdf\word\excel\ppt\zip\rar or pictures')])
     pic = FileField(label='Pic 1',validators=[
         FileAllowed(['bmp','BMP','jif','JIF','JPG','jpg','JPEG','jpeg','PNG','png'],message='You can upload bmp/jpg/jpeg/png/bmp/jif')])
     pic1 = FileField(label='Pic 2',validators=[
@@ -294,8 +296,6 @@ class PostFormE2(FlaskForm):
         FileAllowed(['bmp','BMP','jif','JIF','JPG','jpg','JPEG','jpeg','PNG','png'],message='You can upload bmp/jpg/jpeg/png/bmp/jif')])
     pic3 = FileField(label='Pic 4',validators=[
         FileAllowed(['bmp','BMP','jif','JIF','JPG','jpg','JPEG','jpeg','PNG','png'],message='You can upload bmp/jpg/jpeg/png/bmp/jif')])
-    file1 = FileField(label='File 1',validators=[
-        FileAllowed(['bmp','BMP','jif','JIF','JPG','jpg','JPEG','jpeg','PNG','png','txt','TXT','pdf','PDF','xls','XLS','xlsx','XLSX','ppt','PPT','pptx','PPTX','doc','DOC','docx','DOCX', 'zip', 'ZIP', 'rar', 'RAR'],message='You can upload txt\pdf\word\excel\ppt\zip\rar or pictures')])
     file2 = FileField(label='File 2',validators=[
         FileAllowed(['bmp','BMP','jif','JIF','JPG','jpg','JPEG','jpeg','PNG','png','txt','TXT','pdf','PDF','xls','XLS','xlsx','XLSX','ppt','PPT','pptx','PPTX','doc','DOC','docx','DOCX', 'zip', 'ZIP', 'rar', 'RAR'],message='You can upload txt\pdf\word\excel\ppt\zip\rar or pictures')])
     file5 = FileField(label='File 3',validators=[
